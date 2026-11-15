@@ -1,0 +1,3140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Reflexo Cálculo — Derivadas e Integrais</title>
+  <style>
+    :root {
+      --bg-main: #090d16;
+      --bg-panel: #111827;
+      --bg-card: #1a2436;
+      --bg-elevated: #223048;
+      --bg-hover: #293956;
+      --border: #2a3a54;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --derive-color: #38bdf8;
+      --derive-bg: rgba(56, 189, 248, 0.14);
+      --integrate-color: #f59e0b;
+      --integrate-bg: rgba(245, 158, 11, 0.14);
+      --explore-color: #10b981;
+      --explore-bg: rgba(16, 185, 129, 0.14);
+      --chaos-color: #c084fc;
+      --xp-color: #a855f7;
+      --success: #22c55e;
+      --success-bg: rgba(34, 197, 94, 0.18);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.18);
+      --warning: #eab308;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-math: "Cambria Math", "STIX Two Math", "Latin Modern Math", Georgia, serif;
+      --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f1f5f9;
+      --bg-panel: #ffffff;
+      --bg-card: #f8fafc;
+      --bg-elevated: #e2e8f0;
+      --bg-hover: #cbd5e1;
+      --border: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --derive-color: #0284c7;
+      --derive-bg: rgba(2, 132, 199, 0.12);
+      --integrate-color: #d97706;
+      --integrate-bg: rgba(217, 119, 6, 0.12);
+      --explore-color: #059669;
+      --explore-bg: rgba(5, 150, 105, 0.12);
+      --chaos-color: #7e22ce;
+      --xp-color: #7c3aed;
+      --success: #16a34a;
+      --success-bg: rgba(22, 163, 74, 0.15);
+      --danger: #dc2626;
+      --danger-bg: rgba(220, 38, 38, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.4;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    /* REDUCED MOTION RESPECT */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* COMPACT MOBILE-FIRST HEADER */
+    .app-header {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--derive-color), var(--integrate-color));
+      color: #090d16;
+      font-family: var(--font-math);
+      font-weight: 900;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 0.98rem;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .xp-header-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.22rem 0.6rem;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .xp-badge-lvl {
+      color: var(--xp-color);
+      font-family: var(--font-mono);
+      font-weight: 800;
+    }
+
+    .xp-mini-track {
+      width: 48px;
+      height: 6px;
+      background: var(--bg-main);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .xp-mini-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--xp-color), var(--derive-color));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .icon-action-btn {
+      min-width: 40px;
+      min-height: 40px;
+      padding: 0 0.55rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    @media (hover: hover) {
+      .icon-action-btn:hover {
+        background: var(--bg-hover);
+      }
+    }
+
+    .icon-action-btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-label-desktop {
+      display: none;
+      font-size: 0.78rem;
+    }
+
+    @media (min-width: 720px) {
+      .btn-label-desktop {
+        display: inline;
+      }
+      .xp-mini-track {
+        width: 72px;
+      }
+    }
+
+    /* PRIMARY GAME MODE TABS (MOBILE-FIRST THUMB BAR) */
+    .mode-nav-wrap {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 0.75rem 0.55rem;
+    }
+
+    .mode-nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.2rem;
+      gap: 0.2rem;
+    }
+
+    .mode-tab {
+      min-height: 42px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+      padding: 0.25rem 0.4rem;
+    }
+
+    .mode-tab.active {
+      background: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .mode-tab.active[data-game-mode="aventura"] {
+      color: var(--derive-color);
+      border-bottom: 2px solid var(--derive-color);
+    }
+
+    .mode-tab.active[data-game-mode="exploracao"] {
+      color: var(--explore-color);
+      border-bottom: 2px solid var(--explore-color);
+    }
+
+    .mode-tab.active[data-game-mode="blitz"] {
+      color: var(--warning);
+      border-bottom: 2px solid var(--warning);
+    }
+
+    /* CONTEXTUAL SUB-CONTROLS (DIRECTION & CONTENT FILTERS) */
+    .sub-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .dir-selector {
+      display: flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.15rem;
+      gap: 0.15rem;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .dir-btn {
+      flex: 1;
+      min-height: 36px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 0.2rem 0.45rem;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .dir-btn.active {
+      background: var(--bg-panel);
+      color: var(--text-main);
+    }
+
+    .dir-btn.active[data-dir="ida"] {
+      color: var(--derive-color);
+    }
+
+    .dir-btn.active[data-dir="volta"] {
+      color: var(--integrate-color);
+    }
+
+    .dir-btn.active[data-dir="caos"] {
+      color: var(--chaos-color);
+    }
+
+    .context-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex: 1;
+      min-width: 210px;
+    }
+
+    .context-select {
+      flex: 1;
+      min-height: 38px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0 0.6rem;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* EXPLORATION MODE TOPIC CHIPS */
+    .explore-filters {
+      display: none;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      width: 100%;
+      padding-top: 0.15rem;
+    }
+
+    .explore-filters.visible {
+      display: flex;
+    }
+
+    .topic-chip {
+      min-height: 34px;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s ease;
+    }
+
+    .topic-chip.active {
+      background: var(--explore-bg);
+      color: var(--explore-color);
+      border-color: var(--explore-color);
+    }
+
+    /* MAIN WORKSPACE LAYOUT */
+    .workspace {
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0.65rem 0.75rem 1.25rem;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+      align-items: start;
+    }
+
+    @media (min-width: 920px) {
+      .workspace {
+        grid-template-columns: 1fr 340px;
+        padding: 1rem 1.25rem 1.5rem;
+        gap: 1.15rem;
+      }
+    }
+
+    .game-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
+    /* COMPACT HUD STRIP */
+    .hud-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+    }
+
+    .hud-pill-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.45rem 0.65rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .hud-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hud-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.1rem;
+    }
+
+    @media (min-width: 540px) {
+      .hud-val {
+        font-size: 1.2rem;
+      }
+    }
+
+    .hearts-row {
+      display: inline-flex;
+      gap: 0.18rem;
+      font-size: 1.05rem;
+    }
+
+    .heart {
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .heart.lost {
+      opacity: 0.2;
+      transform: scale(0.8);
+      filter: grayscale(1);
+    }
+
+    .free-mode-badge {
+      font-size: 0.78rem;
+      color: var(--explore-color);
+      font-weight: 800;
+      font-family: var(--font-sans);
+    }
+
+    .mult-tag {
+      font-size: 0.72rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-weight: 800;
+    }
+
+    .mult-tag.x2 {
+      background: var(--derive-bg);
+      color: var(--derive-color);
+      border-color: var(--derive-color);
+    }
+
+    .mult-tag.x3 {
+      background: var(--integrate-bg);
+      color: var(--integrate-color);
+      border-color: var(--integrate-color);
+    }
+
+    .mult-tag.x4 {
+      background: rgba(168, 85, 247, 0.2);
+      color: var(--xp-color);
+      border-color: var(--xp-color);
+    }
+
+    /* LEVEL / BLITZ PROGRESS BAR */
+    .status-bar-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.45rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .status-bar-info {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      min-width: 0;
+    }
+
+    .status-badge {
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--derive-color);
+      font-weight: 800;
+      font-size: 0.74rem;
+      white-space: nowrap;
+    }
+
+    .status-title-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-muted);
+    }
+
+    .status-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-card);
+      border-radius: 999px;
+      overflow: hidden;
+      min-width: 60px;
+    }
+
+    .status-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--derive-color), var(--integrate-color));
+      transition: width 0.25s ease;
+    }
+
+    .status-counter {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* QUESTION ARENA CARD */
+    .arena-card {
+      background: var(--bg-panel);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 0.9rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    @media (min-width: 540px) {
+      .arena-card {
+        padding: 1.35rem 1.4rem;
+      }
+    }
+
+    .arena-card.op-ida {
+      border-top: 4px solid var(--derive-color);
+    }
+
+    .arena-card.op-volta {
+      border-top: 4px solid var(--integrate-color);
+    }
+
+    .arena-card.state-correct {
+      border-color: var(--success) !important;
+      box-shadow: 0 0 0 3px var(--success-bg);
+    }
+
+    .arena-card.state-wrong {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px var(--danger-bg);
+      animation: cardShake 0.28s ease;
+    }
+
+    @keyframes cardShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+    }
+
+    /* BLITZ COUNTDOWN BAR & BADGE */
+    .blitz-bar-wrap {
+      display: none;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.65rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.35rem 0.6rem;
+    }
+
+    .blitz-bar-wrap.active {
+      display: flex;
+    }
+
+    .blitz-time-num {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--warning);
+      min-width: 44px;
+    }
+
+    .blitz-time-num.urgent {
+      color: var(--danger);
+    }
+
+    .blitz-progress-outer {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-main);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .blitz-progress-inner {
+      height: 100%;
+      width: 100%;
+      background: var(--warning);
+      transition: background-color 0.15s ease;
+    }
+
+    .blitz-progress-inner.urgent {
+      background: var(--danger);
+    }
+
+    .arena-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .op-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 7px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .op-badge.ida {
+      background: var(--derive-bg);
+      color: var(--derive-color);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .op-badge.volta {
+      background: var(--integrate-bg);
+      color: var(--integrate-color);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .topic-tag {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* MATH EXPRESSION STAGE */
+    .math-stage {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.15rem 0.75rem;
+      text-align: center;
+      margin-bottom: 0.85rem;
+      min-height: 106px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+
+    @media (min-width: 540px) {
+      .math-stage {
+        padding: 1.45rem 1rem;
+        min-height: 122px;
+      }
+    }
+
+    .prompt-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .math-display {
+      font-family: var(--font-math);
+      font-size: clamp(1.55rem, 5.5vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .integral-sym {
+      font-size: 1.22em;
+      line-height: 1;
+      color: var(--integrate-color);
+      font-weight: 400;
+      margin-right: 0.08em;
+    }
+
+    .deriv-sym {
+      color: var(--derive-color);
+      margin-right: 0.12em;
+    }
+
+    .frac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      font-size: 0.82em;
+      line-height: 1.05;
+      margin: 0 0.1em;
+    }
+
+    .frac .num {
+      border-bottom: 1.5px solid currentColor;
+      padding: 0 0.2em 0.06em;
+    }
+
+    .frac .den {
+      padding: 0.06em 0.2em 0;
+    }
+
+    /* TOUCH-FIRST OPTIONS GRID */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 359px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .option-btn {
+      min-height: 56px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1.5px solid var(--border);
+      border-radius: 11px;
+      padding: 0.7rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.1s ease, border-color 0.12s ease, background-color 0.12s ease;
+    }
+
+    @media (hover: hover) {
+      .option-btn:hover:not(:disabled) {
+        background: var(--bg-hover);
+        border-color: var(--text-muted);
+      }
+    }
+
+    .option-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .option-math {
+      font-family: var(--font-math);
+      font-size: clamp(1.08rem, 3.8vw, 1.32rem);
+      font-weight: 700;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .key-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      .key-badge {
+        display: flex;
+      }
+      .option-btn {
+        min-height: 62px;
+        padding: 0.85rem 1.05rem;
+      }
+    }
+
+    .option-btn.correct {
+      background: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      color: var(--text-main);
+    }
+
+    .option-btn.correct .key-badge {
+      background: var(--success);
+      color: #052e16;
+      border-color: var(--success);
+    }
+
+    .option-btn.wrong {
+      background: var(--danger-bg) !important;
+      border-color: var(--danger) !important;
+    }
+
+    .option-btn.wrong .key-badge {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    /* IMMEDIATE EDUCATIONAL FEEDBACK BANNER */
+    .feedback-banner {
+      margin-top: 0.75rem;
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      animation: slideUpFade 0.16s ease;
+    }
+
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-banner.visible {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .feedback-banner.fb-correct {
+      background: var(--success-bg);
+      border: 1px solid var(--success);
+    }
+
+    .feedback-banner.fb-wrong {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger);
+    }
+
+    .feedback-banner.fb-levelup {
+      background: rgba(168, 85, 247, 0.18);
+      border: 1px solid var(--xp-color);
+    }
+
+    .feedback-body {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .feedback-headline {
+      font-weight: 800;
+      font-size: 0.84rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .feedback-banner.fb-correct .feedback-headline {
+      color: var(--success);
+    }
+
+    .feedback-banner.fb-wrong .feedback-headline {
+      color: var(--danger);
+    }
+
+    .feedback-banner.fb-levelup .feedback-headline {
+      color: var(--xp-color);
+    }
+
+    .feedback-tip {
+      font-size: 0.84rem;
+      color: var(--text-main);
+    }
+
+    .continue-btn {
+      min-height: 40px;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      background: var(--bg-panel);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* QUICK CHALLENGE BAR (GAMIFICATION) */
+    .challenge-strip {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.55rem 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      font-size: 0.78rem;
+    }
+
+    .challenge-left {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-width: 0;
+    }
+
+    .challenge-title {
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .challenge-prog {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: var(--xp-color);
+      white-space: nowrap;
+    }
+
+    /* SIDEBAR / STATS & INSIGHTS PANEL */
+    .sidebar-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    @media (max-width: 919px) {
+      .sidebar-panel {
+        display: none;
+      }
+      .sidebar-panel.mobile-expanded {
+        display: flex;
+      }
+    }
+
+    .mobile-drawer-toggle {
+      display: flex;
+      width: 100%;
+      min-height: 44px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      cursor: pointer;
+    }
+
+    @media (min-width: 920px) {
+      .mobile-drawer-toggle {
+        display: none;
+      }
+    }
+
+    .panel-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.9rem;
+    }
+
+    .panel-header {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 800;
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stats-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .stat-tile {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.65rem;
+    }
+
+    .stat-tile-lbl {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .stat-tile-val {
+      font-size: 1.08rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+    }
+
+    /* PERFORMANCE BARS BY OPERATION & FAMILY */
+    .perf-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .perf-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.18rem;
+      font-size: 0.75rem;
+    }
+
+    .perf-row-top {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+    }
+
+    .perf-bar-bg {
+      height: 6px;
+      background: var(--bg-card);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .perf-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    /* ADAPTIVE LEARNING INSIGHT BOX */
+    .insight-callout {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--derive-color);
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.79rem;
+      color: var(--text-main);
+    }
+
+    .insight-callout strong {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+
+    /* ACHIEVEMENTS BADGES GRID */
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.45rem;
+    }
+
+    .badge-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45rem 0.55rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      opacity: 0.38;
+      filter: grayscale(1);
+      transition: all 0.2s ease;
+    }
+
+    .badge-item.unlocked {
+      opacity: 1;
+      filter: none;
+      border-color: rgba(168, 85, 247, 0.45);
+      background: rgba(168, 85, 247, 0.08);
+    }
+
+    .badge-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .badge-info {
+      min-width: 0;
+    }
+
+    .badge-name {
+      font-size: 0.73rem;
+      font-weight: 800;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badge-desc {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* TOAST NOTIFICATION FOR ACHIEVEMENTS / LEVEL UP */
+    .toast-container {
+      position: fixed;
+      bottom: calc(1rem + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      pointer-events: none;
+      width: min(92vw, 380px);
+    }
+
+    .toast-card {
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--xp-color);
+      color: var(--text-main);
+      padding: 0.65rem 0.9rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      animation: slideUpFade 0.22s ease;
+    }
+
+    /* MODALS (COLA MENTAL) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      max-width: 760px;
+      width: 100%;
+      max-height: 86vh;
+      overflow-y: auto;
+      padding: 1rem 1.1rem;
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-bottom: 0.65rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .ref-table th, .ref-table td {
+      padding: 0.45rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .ref-table th {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .text-link-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABEÇALHO COMPACTO MOBILE-FIRST -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">∫d</div>
+        <div class="brand-text">
+          <span class="brand-title">Reflexo Cálculo</span>
+        </div>
+      </div>
+
+      <!-- XP & Nível Geral do Jogador -->
+      <div class="xp-header-pill" title="Experiência acumulada em todos os modos">
+        <span class="xp-badge-lvl" id="playerRankText">Nv. 1</span>
+        <div class="xp-mini-track">
+          <div class="xp-mini-fill" id="playerXpFill"></div>
+        </div>
+        <span id="playerXpText" style="font-family: var(--font-mono); color: var(--text-muted);">0 XP</span>
+      </div>
+
+      <!-- Ações Rápidas -->
+      <div class="header-actions">
+        <button type="button" class="icon-action-btn" id="helpBtn" title="Cola Mental de Derivadas e Integrais (Atalho: H)">
+          📖 <span class="btn-label-desktop">Cola</span>
+        </button>
+        <button type="button" class="icon-action-btn" id="soundBtn" title="Ativar/Desativar Som">
+          🔊
+        </button>
+        <button type="button" class="icon-action-btn" id="themeBtn" title="Alternar Tema Claro/Escuro">
+          🌓
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVEGAÇÃO DE MODOS DE JOGO E FILTROS -->
+  <nav class="mode-nav-wrap" aria-label="Modos de jogo e configurações">
+    <div class="mode-nav-inner">
+      <!-- 3 Modos Principais -->
+      <div class="mode-tabs" role="tablist">
+        <button type="button" class="mode-tab active" data-game-mode="aventura" role="tab" aria-selected="true">
+          🚀 Aventura
+        </button>
+        <button type="button" class="mode-tab" data-game-mode="exploracao" role="tab" aria-selected="false">
+          🧪 Exploração
+        </button>
+        <button type="button" class="mode-tab" data-game-mode="blitz" role="tab" aria-selected="false">
+          ⚡ Blitz 10s
+        </button>
+      </div>
+
+      <!-- Sub-barra: Direção (Derivadas / Integrais / Misto) + Seletor Contextual -->
+      <div class="sub-controls-bar">
+        <div class="dir-selector" role="group" aria-label="Operação matemática">
+          <button type="button" class="dir-btn" data-dir="ida">➔ Derivadas</button>
+          <button type="button" class="dir-btn" data-dir="volta">⬅ Integrais</button>
+          <button type="button" class="dir-btn active" data-dir="caos">⚡ Misto</button>
+        </div>
+
+        <div class="context-select-wrap" id="levelSelectWrap">
+          <select id="stageSelect" class="context-select" aria-label="Nível de dificuldade">
+            <option value="progressivo">📈 Progressão Automática (Domínio)</option>
+            <option value="1">Nível 1: Básico (sen, cos, xⁿ)</option>
+            <option value="2">Nível 2: Trigonométricas (tg, sec)</option>
+            <option value="3">Nível 3: Coeficientes (2sen, -3cos, 4tg)</option>
+            <option value="4">Nível 4: Regra da Cadeia (sen(2x), cos(3x))</option>
+            <option value="5">Nível 5: Mestre (Combinações, ln, eˣ)</option>
+          </select>
+        </div>
+
+        <button type="button" class="icon-action-btn" id="optCountBtn" title="Alternar entre 4 ou 2 alternativas de resposta" style="min-height: 38px; font-size: 0.76rem;">
+          🔢 <span id="optCountText">4 Opções</span>
+        </button>
+      </div>
+
+      <!-- Filtros Rápidos Exclusivos do Modo Exploração (Treino Livre) -->
+      <div class="explore-filters" id="exploreFilters" role="group" aria-label="Conteúdo do Modo Exploração">
+        <button type="button" class="topic-chip active" data-topic="trig_adapt">🌊 Trig Adaptativo (sen, cos, tg)</button>
+        <button type="button" class="topic-chip" data-topic="trig_basic">🎯 Básico (sen, cos, tg)</button>
+        <button type="button" class="topic-chip" data-topic="trig_coeff">🔢 Coeficientes (2sen, -3cos, 4tg)</button>
+        <button type="button" class="topic-chip" data-topic="trig_chain">🔗 Cadeia (sen(2x), 2sen(3x))</button>
+        <button type="button" class="topic-chip" data-topic="poly">📐 Polinomiais (xⁿ)</button>
+        <button type="button" class="topic-chip" data-topic="all">🌐 Completo</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ÁREA PRINCIPAL DO JOGO + PAINEL LATERAL -->
+  <main class="workspace">
+    <section class="game-area">
+      <!-- HUD COMPACTO -->
+      <div class="hud-strip">
+        <div class="hud-pill-box">
+          <span class="hud-label" id="hudLifeLabel">Vidas</span>
+          <div class="hud-val" id="hudLifeContent">
+            <div class="hearts-row" id="heartsRow">
+              <span class="heart">❤️</span>
+              <span class="heart">❤️</span>
+              <span class="heart">❤️</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-pill-box">
+          <span class="hud-label">Combo / Mult</span>
+          <div class="hud-val">
+            <span id="streakVal">0</span>🔥
+            <span class="mult-tag" id="multTag">x1</span>
+          </div>
+        </div>
+
+        <div class="hud-pill-box">
+          <span class="hud-label" id="hudScoreLabel">Pontos (Rec: 0)</span>
+          <div class="hud-val" id="scoreVal">0</div>
+        </div>
+      </div>
+
+      <!-- BARRA DE DOMÍNIO DO NÍVEL -->
+      <div class="status-bar-card" id="statusBarCard">
+        <div class="status-bar-info">
+          <span class="status-badge" id="statusBadge">Nível 1</span>
+          <span class="status-title-text" id="statusTitleText">Básico: sen(x), cos(x)</span>
+        </div>
+        <div class="status-track">
+          <div class="status-fill" id="statusFill"></div>
+        </div>
+        <span class="status-counter" id="statusCounter">0/6</span>
+      </div>
+
+      <!-- ARENA CENTRAL DA QUESTÃO -->
+      <div class="arena-card op-ida" id="arenaCard">
+        <!-- Cronômetro Visível do Modo Blitz -->
+        <div class="blitz-bar-wrap" id="blitzBarWrap">
+          <span>⏱️</span>
+          <span class="blitz-time-num" id="blitzTimeNum">10.0s</span>
+          <div class="blitz-progress-outer">
+            <div class="blitz-progress-inner" id="blitzProgressInner"></div>
+          </div>
+        </div>
+
+        <div class="arena-meta-row">
+          <span class="op-badge ida" id="opBadge">➔ DERIVADA</span>
+          <span class="topic-tag" id="topicTag">Seno & Cosseno</span>
+        </div>
+
+        <div class="math-stage">
+          <span class="prompt-subtitle" id="promptSubtitle">Identifique a derivada imediata:</span>
+          <div class="math-display" id="mathDisplay"></div>
+        </div>
+
+        <!-- 4 ALTERNATIVAS DE TOQUE CONFORTÁVEL -->
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <!-- FEEDBACK EDUCATIVO IMEDIATO -->
+        <div class="feedback-banner" id="feedbackBanner" role="status" aria-live="polite">
+          <div class="feedback-body">
+            <div class="feedback-headline" id="feedbackHeadline"></div>
+            <div class="feedback-tip" id="feedbackTip"></div>
+          </div>
+          <button type="button" class="continue-btn" id="continueBtn">Próxima ➔</button>
+        </div>
+      </div>
+
+      <!-- DESAFIO RÁPIDO ATIVO -->
+      <div class="challenge-strip">
+        <div class="challenge-left">
+          <span>🎯</span>
+          <span class="challenge-title" id="questTitle">Desafio: Acerte 3 questões seguidas</span>
+        </div>
+        <span class="challenge-prog" id="questProg">0/3 (+40 XP)</span>
+      </div>
+
+      <!-- BOTÃO EXPANSOR DE ESTATÍSTICAS E CONQUISTAS NO MOBILE -->
+      <button type="button" class="mobile-drawer-toggle" id="mobileStatsToggle">
+        📊 Ver Estatísticas, Desempenho e Conquistas ▾
+      </button>
+    </section>
+
+    <!-- PAINEL DE ESTATÍSTICAS, APRENDIZAGEM E CONQUISTAS -->
+    <aside class="sidebar-panel" id="sidebarPanel">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span>📊 Desempenho e Evolução</span>
+          <button type="button" class="text-link-btn" id="resetStatsBtn">Zerar dados</button>
+        </div>
+
+        <div class="stats-grid-4">
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Resolvidas</span>
+            <span class="stat-tile-val" id="statTotal">0</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Taxa de Acerto</span>
+            <span class="stat-tile-val" id="statAcc">100%</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Maior Combo</span>
+            <span class="stat-tile-val" id="statBestStreak">0 🔥</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Tempo Médio</span>
+            <span class="stat-tile-val" id="statAvgTime">--</span>
+          </div>
+        </div>
+
+        <!-- Desempenho por Operação e Família -->
+        <div class="perf-list">
+          <div class="perf-row">
+            <div class="perf-row-top">
+              <span style="color: var(--derive-color);">➔ Derivadas</span>
+              <span id="perfDerivText">100% (0/0)</span>
+            </div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar-fill" id="perfDerivFill" style="width: 100%; background: var(--derive-color);"></div>
+            </div>
+          </div>
+
+          <div class="perf-row">
+            <div class="perf-row-top">
+              <span style="color: var(--integrate-color);">⬅ Integrais</span>
+              <span id="perfIntegText">100% (0/0)</span>
+            </div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar-fill" id="perfIntegFill" style="width: 100%; background: var(--integrate-color);"></div>
+            </div>
+          </div>
+
+          <div class="perf-row">
+            <div class="perf-row-top">
+              <span>🌊 Trigonométricas (sen, cos, tg)</span>
+              <span id="perfTrigText">100%</span>
+            </div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar-fill" id="perfTrigFill" style="width: 100%; background: var(--explore-color);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagnóstico Inteligente de Dificuldade -->
+        <div class="insight-callout">
+          <strong>💡 Diagnóstico de Aprendizagem</strong>
+          <span id="learningInsightText">Pratique algumas questões para receber dicas personalizadas sobre seus pontos fortes e de atenção!</span>
+        </div>
+      </div>
+
+      <!-- MEDALHAS E CONQUISTAS -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <span>🏆 Conquistas (<span id="unlockedCountText">0/8</span>)</span>
+        </div>
+        <div class="badges-grid" id="badgesGrid"></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- CONTAINER DE NOTIFICAÇÕES (CONQUISTAS / LEVEL UP) -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- MODAL: COLA MENTAL DE SINAIS E RELAÇÕES -->
+  <div class="modal-backdrop" id="helpModal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <h3>📖 Guia Rápido: Derivadas ⇄ Integrais</h3>
+        <button type="button" class="icon-action-btn" id="closeHelpBtn">✕</button>
+      </div>
+
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Função f(x)</th>
+            <th style="color: var(--derive-color);">➔ Derivada f'(x)</th>
+            <th style="color: var(--integrate-color);">⬅ Integral ∫ f(x) dx</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>sen(x)</strong></td>
+            <td>+cos(x)</td>
+            <td><strong>-cos(x) + C</strong></td>
+          </tr>
+          <tr>
+            <td><strong>cos(x)</strong></td>
+            <td><strong>-sen(x)</strong></td>
+            <td>+sen(x) + C</td>
+          </tr>
+          <tr>
+            <td><strong>tg(x)</strong></td>
+            <td><strong>sec²(x)</strong></td>
+            <td><strong>-ln|cos(x)| + C</strong> <em>(ou ln|sec(x)| + C)</em></td>
+          </tr>
+          <tr>
+            <td><strong>k · f(x)</strong></td>
+            <td>k · f'(x)</td>
+            <td>k · F(x) + C</td>
+          </tr>
+          <tr>
+            <td><strong>sen(ax)</strong></td>
+            <td><strong>+a · cos(ax)</strong> (multiplica por a)</td>
+            <td><strong>-(1/a) · cos(ax) + C</strong> (divide por a)</td>
+          </tr>
+          <tr>
+            <td><strong>cos(ax)</strong></td>
+            <td><strong>-a · sen(ax)</strong> (multiplica por a)</td>
+            <td><strong>+(1/a) · sen(ax) + C</strong> (divide por a)</td>
+          </tr>
+          <tr>
+            <td><strong>tg(ax)</strong></td>
+            <td><strong>a · sec²(ax)</strong></td>
+            <td><strong>-(1/a) · ln|cos(ax)| + C</strong></td>
+          </tr>
+          <tr>
+            <td><strong>sec²(ax)</strong></td>
+            <td>2a · sec²(ax)·tg(ax)</td>
+            <td><strong>(1/a) · tg(ax) + C</strong></td>
+          </tr>
+          <tr>
+            <td><strong>xⁿ (n ≠ -1)</strong></td>
+            <td>n · xⁿ⁻¹</td>
+            <td>xⁿ⁺¹ / (n + 1) + C</td>
+          </tr>
+          <tr>
+            <td><strong>1/x e eᵃˣ</strong></td>
+            <td>d/dx[1/x] = -1/x² | d/dx[eᵃˣ] = a·eᵃˣ</td>
+            <td>∫(1/x)dx = ln|x| + C | ∫eᵃˣdx = (1/a)eᵃˣ + C</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.75rem;">
+        💡 <strong>Regra de Ouro:</strong> Na derivação, funções iniciadas com <strong>"CO"</strong> (cos, cotg, cosec) ganham sinal <strong>negativo (-)</strong>. Na integração de argumentos compostos <strong>f(ax)</strong>, sempre <strong>dividimos</strong> pelo coeficiente interno <strong>a</strong>!
+      </p>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ============================================================================
+     * 1. MOTOR MATEMÁTICO SIMBÓLICO E GERADOR PROCEDURAL (MathEngine)
+     * Trabalha com representações matemáticas estruturadas (AST) e equivalência real.
+     * ============================================================================
+     */
+    const MathEngine = (() => {
+      function gcd(a, b) {
+        a = Math.abs(Math.round(a));
+        b = Math.abs(Math.round(b));
+        while (b !== 0) {
+          const t = b;
+          b = a % b;
+          a = t;
+        }
+        return a || 1;
+      }
+
+      // Cria uma expressão matemática estruturada canônica
+      function createExpr({
+        kind,        // 'trig' | 'ln_trig' | 'poly' | 'inv' | 'exp' | 'combo'
+        fn = '',     // 'sen' | 'cos' | 'tg' | 'sec2' | 'sec' | 'sec_tg' | 'cotg' | 'cosec2' | 'ln_cos' | 'ln_sec' | 'ln_sen' | 'ln_x'
+        num = 1,     // numerador do coeficiente externo (com sinal)
+        den = 1,     // denominador do coeficiente externo (>0)
+        inner = 1,   // coeficiente linear interno 'a' em f(ax)
+        power = 1,   // expoente para polinomiais
+        plusC = false,
+        comboTerms = null // para somas [expr1, expr2]
+      }) {
+        if (den < 0) {
+          num = -num;
+          den = -den;
+        }
+        if (num === 0) {
+          den = 1;
+        } else {
+          const d = gcd(num, den);
+          num = num / d;
+          den = den / d;
+        }
+        return { kind, fn, num, den, inner, power, plusC, comboTerms };
+      }
+
+      // Converte um objeto estruturado MathExpr para uma assinatura canônica de equivalência matemática
+      function getCanonicalSignature(expr) {
+        if (!expr) return 'null';
+        if (expr.kind === 'combo' && Array.isArray(expr.comboTerms)) {
+          const subSigs = expr.comboTerms.map((t) => getCanonicalSignature({ ...t, plusC: false })).sort();
+          return `combo(${subSigs.join('+')})|C:${expr.plusC ? 1 : 0}`;
+        }
+
+        // Equivalência matemática fundamental: -k * ln|cos(ax)| + C === +k * ln|sec(ax)| + C
+        let normKind = expr.kind;
+        let normFn = expr.fn;
+        let normNum = expr.num;
+        let normDen = expr.den;
+
+        if (normKind === 'ln_trig' && normFn === 'ln_sec') {
+          normFn = 'ln_cos';
+          normNum = -normNum;
+        }
+
+        return `${normKind}|${normFn}|${normNum}/${normDen}|in:${expr.inner}|p:${expr.power}|C:${expr.plusC ? 1 : 0}`;
+      }
+
+      // Verifica se duas expressões estruturadas são matematicamente equivalentes
+      function areEquivalent(exprA, exprB) {
+        if (!exprA || !exprB) return false;
+        return getCanonicalSignature(exprA) === getCanonicalSignature(exprB);
+      }
+
+      // Formata um coeficiente racional (num/den) antes de uma função/variável
+      function formatCoeffPrefix(num, den, isLeading = true) {
+        const sign = num < 0 ? '-' : isLeading ? '' : ' + ';
+        const absNum = Math.abs(num);
+
+        if (den === 1) {
+          if (absNum === 1) return sign;
+          return `${sign}${absNum}`;
+        }
+        return `${sign}<span class="frac"><span class="num">${absNum}</span><span class="den">${den}</span></span>`;
+      }
+
+      // Renderiza um objeto MathExpr diretamente em HTML matemático limpo
+      function renderExprHtml(expr, includePlusC = true) {
+        if (!expr) return '';
+
+        if (expr.kind === 'combo' && Array.isArray(expr.comboTerms)) {
+          const parts = expr.comboTerms.map((term, idx) => {
+            const raw = renderSingleTermHtml(term, idx === 0);
+            return raw;
+          });
+          const suffix = includePlusC && expr.plusC ? ' + C' : '';
+          return parts.join('') + suffix;
+        }
+
+        const core = renderSingleTermHtml(expr, true);
+        const suffix = includePlusC && expr.plusC ? ' + C' : '';
+        return core + suffix;
+      }
+
+      function renderSingleTermHtml(expr, isLeading = true) {
+        const { kind, fn, num, den, inner, power } = expr;
+        const signStr = num < 0 ? (isLeading ? '-' : ' - ') : (isLeading ? '' : ' + ');
+        const absNum = Math.abs(num);
+        const argStr = inner === 1 ? 'x' : `${inner}x`;
+
+        if (kind === 'poly') {
+          if (power === 0) {
+            if (den === 1) return `${signStr}${absNum}`;
+            return `${signStr}<span class="frac"><span class="num">${absNum}</span><span class="den">${den}</span></span>`;
+          }
+          const xPart = power === 1 ? 'x' : `x<sup>${power}</sup>`;
+          if (den === 1) {
+            const cStr = absNum === 1 ? '' : `${absNum}`;
+            return `${signStr}${cStr}${xPart}`;
+          }
+          const numStr = absNum === 1 ? xPart : `${absNum}${xPart}`;
+          return `${signStr}<span class="frac"><span class="num">${numStr}</span><span class="den">${den}</span></span>`;
+        }
+
+        if (kind === 'inv') {
+          const denPart = power === 1 ? 'x' : `x<sup>${power}</sup>`;
+          const denFull = den === 1 ? denPart : `${den}${denPart}`;
+          return `${signStr}<span class="frac"><span class="num">${absNum}</span><span class="den">${denFull}</span></span>`;
+        }
+
+        if (kind === 'exp') {
+          const expPart = inner === 1 ? 'e<sup>x</sup>' : `e<sup>${inner}x</sup>`;
+          const prefix = formatCoeffPrefix(num, den, isLeading);
+          return `${prefix}${expPart}`;
+        }
+
+        if (kind === 'ln_trig') {
+          const prefix = formatCoeffPrefix(num, den, isLeading);
+          if (fn === 'ln_x') return `${prefix}ln|x|`;
+          if (fn === 'ln_cos') return `${prefix}ln|cos(${argStr})|`;
+          if (fn === 'ln_sec') return `${prefix}ln|sec(${argStr})|`;
+          if (fn === 'ln_sen') return `${prefix}ln|sen(${argStr})|`;
+        }
+
+        if (kind === 'trig') {
+          const prefix = formatCoeffPrefix(num, den, isLeading);
+          if (fn === 'sen') return `${prefix}sen(${argStr})`;
+          if (fn === 'cos') return `${prefix}cos(${argStr})`;
+          if (fn === 'tg') return `${prefix}tg(${argStr})`;
+          if (fn === 'sec2') return `${prefix}sec<sup>2</sup>(${argStr})`;
+          if (fn === 'sec') return `${prefix}sec(${argStr})`;
+          if (fn === 'sec_tg') return `${prefix}sec(${argStr})·tg(${argStr})`;
+          if (fn === 'cotg') return `${prefix}cotg(${argStr})`;
+          if (fn === 'cosec2') return `${prefix}cosec<sup>2</sup>(${argStr})`;
+          if (fn === 'cosec_cotg') return `${prefix}cosec(${argStr})·cotg(${argStr})`;
+        }
+
+        return '';
+      }
+
+      // CÁLCULO SIMBÓLICO DA DERIVADA: d/dx [expr]
+      function computeDerivative(expr) {
+        if (expr.kind === 'combo') {
+          return createExpr({
+            kind: 'combo',
+            plusC: false,
+            comboTerms: expr.comboTerms.map((t) => computeDerivative(t))
+          });
+        }
+
+        const { kind, fn, num, den, inner, power } = expr;
+
+        if (kind === 'trig') {
+          if (fn === 'sen') {
+            return createExpr({ kind: 'trig', fn: 'cos', num: num * inner, den, inner });
+          }
+          if (fn === 'cos') {
+            return createExpr({ kind: 'trig', fn: 'sen', num: -num * inner, den, inner });
+          }
+          if (fn === 'tg') {
+            return createExpr({ kind: 'trig', fn: 'sec2', num: num * inner, den, inner });
+          }
+          if (fn === 'sec') {
+            return createExpr({ kind: 'trig', fn: 'sec_tg', num: num * inner, den, inner });
+          }
+          if (fn === 'cotg') {
+            return createExpr({ kind: 'trig', fn: 'cosec2', num: -num * inner, den, inner });
+          }
+        }
+
+        if (kind === 'poly') {
+          return createExpr({
+            kind: 'poly',
+            num: num * power,
+            den,
+            power: power - 1
+          });
+        }
+
+        if (kind === 'inv' && power === 1) {
+          return createExpr({ kind: 'inv', num: -num, den, power: 2 });
+        }
+
+        if (kind === 'ln_trig' && fn === 'ln_x') {
+          return createExpr({ kind: 'inv', num, den, power: 1 });
+        }
+
+        if (kind === 'exp') {
+          return createExpr({ kind: 'exp', num: num * inner, den, inner });
+        }
+
+        return expr;
+      }
+
+      // CÁLCULO SIMBÓLICO DA INTEGRAL: ∫ expr dx
+      function computeIntegral(expr) {
+        if (expr.kind === 'combo') {
+          return createExpr({
+            kind: 'combo',
+            plusC: true,
+            comboTerms: expr.comboTerms.map((t) => {
+              const intTerm = computeIntegral(t);
+              return { ...intTerm, plusC: false };
+            })
+          });
+        }
+
+        const { kind, fn, num, den, inner, power } = expr;
+
+        if (kind === 'trig') {
+          if (fn === 'sen') {
+            return createExpr({ kind: 'trig', fn: 'cos', num: -num, den: den * inner, inner, plusC: true });
+          }
+          if (fn === 'cos') {
+            return createExpr({ kind: 'trig', fn: 'sen', num, den: den * inner, inner, plusC: true });
+          }
+          if (fn === 'tg') {
+            // ∫ k*tg(ax) dx = -(k/a) ln|cos(ax)| + C === +(k/a) ln|sec(ax)| + C
+            const useSecForm = Math.random() < 0.35;
+            if (useSecForm) {
+              return createExpr({ kind: 'ln_trig', fn: 'ln_sec', num, den: den * inner, inner, plusC: true });
+            }
+            return createExpr({ kind: 'ln_trig', fn: 'ln_cos', num: -num, den: den * inner, inner, plusC: true });
+          }
+          if (fn === 'sec2') {
+            return createExpr({ kind: 'trig', fn: 'tg', num, den: den * inner, inner, plusC: true });
+          }
+          if (fn === 'sec_tg') {
+            return createExpr({ kind: 'trig', fn: 'sec', num, den: den * inner, inner, plusC: true });
+          }
+          if (fn === 'cosec2') {
+            return createExpr({ kind: 'trig', fn: 'cotg', num: -num, den: den * inner, inner, plusC: true });
+          }
+        }
+
+        if (kind === 'poly') {
+          return createExpr({
+            kind: 'poly',
+            num,
+            den: den * (power + 1),
+            power: power + 1,
+            plusC: true
+          });
+        }
+
+        if (kind === 'inv') {
+          if (power === 1) {
+            return createExpr({ kind: 'ln_trig', fn: 'ln_x', num, den, plusC: true });
+          }
+          if (power === 2) {
+            return createExpr({ kind: 'inv', num: -num, den, power: 1, plusC: true });
+          }
+        }
+
+        if (kind === 'exp') {
+          return createExpr({ kind: 'exp', num, den: den * inner, inner, plusC: true });
+        }
+
+        return { ...expr, plusC: true };
+      }
+
+      // GERADOR INTELIGENTE DE DISTRATORES MATEMATICAMENTE COERENTES E DISTINTOS
+      function buildDistractors(promptExpr, dir, correctExpr) {
+        const candidates = [];
+        const plusC = dir === 'volta';
+
+        const pushUnique = (cand) => {
+          if (!cand) return;
+          const withC = { ...cand, plusC };
+          if (areEquivalent(withC, correctExpr)) return;
+          if (candidates.some((existing) => areEquivalent(existing, withC))) return;
+          candidates.push(withC);
+        };
+
+        if (correctExpr.kind === 'combo' && Array.isArray(correctExpr.comboTerms)) {
+          const [t1, t2] = correctExpr.comboTerms;
+          // 1. Inversão do sinal do segundo termo
+          pushUnique(createExpr({ kind: 'combo', plusC, comboTerms: [t1, { ...t2, num: -t2.num }] }));
+          // 2. Inversão do sinal do primeiro termo
+          pushUnique(createExpr({ kind: 'combo', plusC, comboTerms: [{ ...t1, num: -t1.num }, t2] }));
+          // 3. Ambos sinais invertidos
+          pushUnique(createExpr({ kind: 'combo', plusC, comboTerms: [{ ...t1, num: -t1.num }, { ...t2, num: -t2.num }] }));
+          return candidates.slice(0, 3);
+        }
+
+        // Distrator 1: Erro clássico de sinal (- vs +)
+        pushUnique(createExpr({ ...correctExpr, num: -correctExpr.num, plusC }));
+
+        // Distrator 2: Confusão entre Regra da Cadeia de Derivada (multiplica por a) vs Integral (divide por a)
+        if (promptExpr.inner > 1) {
+          const a = promptExpr.inner;
+          if (dir === 'ida') {
+            // Esqueceu de multiplicar por a, ou dividiu por a
+            pushUnique(createExpr({ ...correctExpr, num: promptExpr.num * (correctExpr.num < 0 ? -1 : 1), den: 1, plusC }));
+            pushUnique(createExpr({ ...correctExpr, num: promptExpr.num * (correctExpr.num < 0 ? -1 : 1), den: a, plusC }));
+            pushUnique(createExpr({ ...correctExpr, num: -promptExpr.num * (correctExpr.num < 0 ? -1 : 1), den: 1, plusC }));
+          } else {
+            // Na integral, multiplicou por a em vez de dividir, ou esqueceu de dividir por a
+            pushUnique(createExpr({ ...correctExpr, num: promptExpr.num * a * (correctExpr.num < 0 ? -1 : 1), den: 1, plusC }));
+            pushUnique(createExpr({ ...correctExpr, num: promptExpr.num * (correctExpr.num < 0 ? -1 : 1), den: 1, plusC }));
+            pushUnique(createExpr({ ...correctExpr, num: -promptExpr.num * a * (correctExpr.num < 0 ? -1 : 1), den: 1, plusC }));
+          }
+        }
+
+        // Distrator 3: Confusão de operação (fez derivada quando pediu integral de tg, ou trocou sen/cos/sec²)
+        if (promptExpr.kind === 'trig') {
+          const pNum = promptExpr.num;
+          const pInner = promptExpr.inner;
+          if (promptExpr.fn === 'tg' && dir === 'volta') {
+            // Erro clássico: achar que ∫ tg(x) dx = sec²(x) + C
+            pushUnique(createExpr({ kind: 'trig', fn: 'sec2', num: pNum, den: pInner, inner: pInner, plusC: true }));
+            pushUnique(createExpr({ kind: 'ln_trig', fn: 'ln_sen', num: pNum, den: pInner, inner: pInner, plusC: true }));
+          }
+          if (promptExpr.fn === 'tg' && dir === 'ida') {
+            pushUnique(createExpr({ kind: 'trig', fn: 'sec_tg', num: pNum * pInner, den: 1, inner: pInner, plusC: false }));
+            pushUnique(createExpr({ kind: 'ln_trig', fn: 'ln_cos', num: -pNum, den: 1, inner: pInner, plusC: false }));
+          }
+          const altFnMap = {
+            sen: 'cos',
+            cos: 'sen',
+            sec2: 'sec_tg',
+            sec_tg: 'sec2',
+            sec: 'tg',
+            cotg: 'cosec_cotg',
+            cosec2: 'cotg'
+          };
+          const swappedFn = altFnMap[correctExpr.fn] || 'sen';
+          pushUnique(createExpr({ ...correctExpr, fn: swappedFn, plusC }));
+          pushUnique(createExpr({ ...correctExpr, fn: swappedFn, num: -correctExpr.num, plusC }));
+        }
+
+        if (promptExpr.kind === 'poly') {
+          // Confundiu derivada com integral
+          const p = promptExpr.power;
+          const n = promptExpr.num;
+          if (dir === 'ida') {
+            pushUnique(createExpr({ kind: 'poly', num: n, den: p + 1, power: p + 1, plusC: false }));
+            pushUnique(createExpr({ kind: 'poly', num: n, den: 1, power: Math.max(1, p - 1), plusC: false }));
+            pushUnique(createExpr({ kind: 'poly', num: n * p, den: 1, power: p, plusC: false }));
+          } else {
+            pushUnique(createExpr({ kind: 'poly', num: n * p, den: 1, power: Math.max(0, p - 1), plusC: true }));
+            pushUnique(createExpr({ kind: 'poly', num: n, den: 1, power: p + 1, plusC: true }));
+            pushUnique(createExpr({ kind: 'poly', num: n * (p + 1), den: 1, power: p + 1, plusC: true }));
+          }
+        }
+
+        if (promptExpr.kind === 'inv' || promptExpr.kind === 'ln_trig') {
+          pushUnique(createExpr({ kind: 'inv', num: -promptExpr.num, den: 1, power: 2, plusC }));
+          pushUnique(createExpr({ kind: 'inv', num: promptExpr.num, den: 1, power: 2, plusC }));
+          pushUnique(createExpr({ kind: 'ln_trig', fn: 'ln_x', num: promptExpr.num, den: 1, plusC }));
+          pushUnique(createExpr({ kind: 'ln_trig', fn: 'ln_x', num: -promptExpr.num, den: 1, plusC }));
+        }
+
+        if (promptExpr.kind === 'exp') {
+          const a = promptExpr.inner;
+          pushUnique(createExpr({ kind: 'exp', num: promptExpr.num, den: 1, inner: a, plusC }));
+          pushUnique(createExpr({ kind: 'exp', num: promptExpr.num * a, den: 1, inner: a, plusC }));
+          pushUnique(createExpr({ kind: 'exp', num: promptExpr.num, den: a, inner: a, plusC }));
+          pushUnique(createExpr({ kind: 'exp', num: -promptExpr.num * a, den: 1, inner: a, plusC }));
+        }
+
+        // Fallback seguro caso ainda faltem candidatos para completar 3 distratores
+        let multFallback = 2;
+        while (candidates.length < 3) {
+          pushUnique(createExpr({ ...correctExpr, num: correctExpr.num * multFallback, plusC }));
+          pushUnique(createExpr({ ...correctExpr, num: -correctExpr.num * multFallback, plusC }));
+          multFallback += 1;
+        }
+
+        return candidates.slice(0, 3);
+      }
+
+      // GERAÇÃO DE FEEDBACK EDUCATIVO CURTO E CONTEXTUALIZADO (ACERTO E ERRO)
+      function buildFeedback(promptExpr, dir, correctExpr) {
+        const promptHtml = renderExprHtml(promptExpr, false);
+        const answerHtml = renderExprHtml(correctExpr, true);
+        const opName = dir === 'ida' ? 'derivada' : 'integral';
+        const opAction = dir === 'ida' ? 'derivar' : 'integrar';
+
+        let tip = '';
+        if (promptExpr.kind === 'trig') {
+          const fn = promptExpr.fn;
+          const hasChain = promptExpr.inner > 1;
+          const a = promptExpr.inner;
+
+          if (fn === 'sen' && dir === 'ida') {
+            tip = hasChain
+              ? `Seno vira +cosseno na derivação e multiplica pelo coeficiente interno (${a}).`
+              : 'Sen(x) vira +cos(x) (sinal positivo!) na derivação.';
+          } else if (fn === 'sen' && dir === 'volta') {
+            tip = hasChain
+              ? `A integral de sen(${a}x) ganha sinal negativo (-cos) e divide por ${a}.`
+              : 'Atenção ao sinal: a integral de sen(x) é -cos(x) + C!';
+          } else if (fn === 'cos' && dir === 'ida') {
+            tip = hasChain
+              ? `Cosseno ganha sinal negativo (-sen) ao derivar e multiplica por ${a}.`
+              : 'Funções iniciadas com "CO" (cosseno) ganham sinal negativo (-) na derivada!';
+          } else if (fn === 'cos' && dir === 'volta') {
+            tip = hasChain
+              ? `A antiderivada de cos(${a}x) é positiva (+sen) e divide por ${a}.`
+              : 'Na integração, cos(x) volta para +sen(x) + C (sinal positivo!).';
+          } else if (fn === 'tg' && dir === 'ida') {
+            tip = hasChain
+              ? `A derivada de tg(${a}x) é sec²(${a}x) multiplicada por ${a}.`
+              : 'Par fundamental: a derivada de tg(x) é sec²(x).';
+          } else if (fn === 'tg' && dir === 'volta') {
+            tip = 'A integral de tg(u) é -ln|cos(u)| + C (equivalente a ln|sec(u)| + C).';
+          } else if (fn === 'sec2' && dir === 'volta') {
+            tip = 'Como a derivada de tg(x) é sec²(x), a integral de sec²(x) volta para tg(x) + C!';
+          } else if (fn === 'sec' || fn === 'sec_tg') {
+            tip = 'A derivada de sec(x) é sec(x)·tg(x), e sua integral faz o caminho inverso!';
+          } else {
+            tip = 'Nas co-funções (cotg, cosec), lembre-se sempre da troca de sinal negativo (-).';
+          }
+        } else if (promptExpr.kind === 'poly') {
+          tip = dir === 'ida'
+            ? 'Regra do Tombo: o expoente desce multiplicando e diminui 1 unidade.'
+            : 'Regra da Potência na integral: soma 1 ao expoente e divide pelo novo expoente!';
+        } else if (promptExpr.kind === 'combo') {
+          tip = 'Resolva termo a termo aplicando a regra de sinal individual de cada função.';
+        } else {
+          tip = dir === 'ida'
+            ? 'Lembre-se: d/dx[ln|x|] = 1/x, d/dx[1/x] = -1/x² e d/dx[eᵃˣ] = a·eᵃˣ.'
+            : 'Lembre-se: ∫(1/x)dx = ln|x| + C e ∫eᵃˣdx = (1/a)eᵃˣ + C.';
+        }
+
+        const hitHeadline =
+          dir === 'ida'
+            ? `Isso! A derivada de ${promptHtml} é ${answerHtml}.`
+            : `Boa! A antiderivada de ${promptHtml} é ${answerHtml}.`;
+
+        const missHeadline =
+          dir === 'ida'
+            ? `Quase! A derivada correta de ${promptHtml} é ${answerHtml}.`
+            : `Atenção: a ${opName} de ${promptHtml} é ${answerHtml}.`;
+
+        return { hitHeadline, missHeadline, tip };
+      }
+
+      // CATÁLOGO PROCEDURAL DE TEMPLATES POR CATEGORIA E NÍVEL
+      function generateQuestion({
+        level = 1,
+        dir = 'ida',
+        topicFilter = 'all',
+        recentSigs = [],
+        weakFamily = null,
+        optionsCount = 4,
+        familyStats = null
+      }) {
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+        // Verifica se o jogador já domina seno e cosseno básicos (Progressão Adaptativa)
+        let masteredSenCos = false;
+        if (familyStats && familyStats.sen && familyStats.cos) {
+          const senTot = familyStats.sen.hits + familyStats.sen.misses;
+          const cosTot = familyStats.cos.hits + familyStats.cos.misses;
+          if (senTot + cosTot >= 4) {
+            const acc = (familyStats.sen.hits + familyStats.cos.hits) / (senTot + cosTot);
+            if (acc >= 0.78) masteredSenCos = true;
+          }
+        }
+
+        // Geradores modulares por família e nível
+        const genBasicTrig = () => {
+          const fns = ['sen', 'cos'];
+          const fn = weakFamily && fns.includes(weakFamily) && Math.random() < 0.6 ? weakFamily : pick(fns);
+          const sign = Math.random() < 0.25 ? -1 : 1;
+          return {
+            expr: createExpr({ kind: 'trig', fn, num: sign, den: 1, inner: 1 }),
+            family: fn,
+            tag: 'Básico • Seno e Cosseno'
+          };
+        };
+
+        const genPureSenCosTg = () => {
+          const fns = masteredSenCos ? ['sen', 'cos', 'tg', 'tg'] : ['sen', 'cos', 'tg'];
+          const fn = weakFamily && ['sen', 'cos', 'tg'].includes(weakFamily) && Math.random() < 0.55 ? weakFamily : pick(fns);
+          const sign = Math.random() < 0.2 ? -1 : 1;
+          return {
+            expr: createExpr({ kind: 'trig', fn, num: sign, den: 1, inner: 1 }),
+            family: fn,
+            tag: 'Trigonométricas • sen(x), cos(x), tg(x)'
+          };
+        };
+
+        const genBasicPoly = () => {
+          const powers = [1, 2, 3, 4];
+          const p = pick(powers);
+          const coeff = p === 2 && Math.random() < 0.4 ? 3 : 1;
+          return {
+            expr: createExpr({ kind: 'poly', num: coeff, den: 1, power: p }),
+            family: 'poly',
+            tag: 'Básico • Polinomial xⁿ'
+          };
+        };
+
+        const genLevel2Trig = () => {
+          if (dir === 'ida') {
+            const fn = pick(['tg', 'tg', 'sec', 'sen', 'cos']);
+            const sign = Math.random() < 0.25 ? -1 : 1;
+            return {
+              expr: createExpr({ kind: 'trig', fn, num: sign, den: 1, inner: 1 }),
+              family: fn === 'sec' ? 'tg' : fn,
+              tag: 'Trigonométricas • Tangente e Secante'
+            };
+          } else {
+            const fn = pick(['tg', 'sec2', 'sec_tg', 'sen', 'cos']);
+            const sign = Math.random() < 0.25 ? -1 : 1;
+            return {
+              expr: createExpr({ kind: 'trig', fn, num: sign, den: 1, inner: 1 }),
+              family: fn === 'sec2' || fn === 'sec_tg' ? 'tg' : fn,
+              tag: 'Trigonométricas • Tangente e Secante'
+            };
+          }
+        };
+
+        const genCoeffTrig = () => {
+          const coeffs = [2, 3, 4, 5, -2, -3, -4];
+          const c = pick(coeffs);
+          const fns = dir === 'ida' ? ['sen', 'cos', 'tg'] : ['sen', 'cos', 'tg', 'sec2'];
+          const fn = pick(fns);
+          return {
+            expr: createExpr({ kind: 'trig', fn, num: c, den: 1, inner: 1 }),
+            family: fn === 'sec2' ? 'tg' : fn,
+            tag: 'Coeficientes • k·f(x)'
+          };
+        };
+
+        const genChainTrig = () => {
+          const inners = [2, 3, 4];
+          const a = pick(inners);
+          const outerCoeffs = [1, 1, 2, 3, -1, -2];
+          const k = pick(outerCoeffs);
+          const fns = dir === 'ida' ? ['sen', 'cos', 'tg'] : ['sen', 'cos', 'tg', 'sec2'];
+          const fn = pick(fns);
+          return {
+            expr: createExpr({ kind: 'trig', fn, num: k, den: 1, inner: a }),
+            family: 'chain',
+            tag: 'Regra da Cadeia • f(ax)'
+          };
+        };
+
+        const genMasterLevel = () => {
+          const roll = Math.random();
+          if (roll < 0.38) {
+            const c1 = pick([1, 2, 3, -1, -2]);
+            const c2 = pick([1, 2, 3, -1, -2]);
+            const t1 = createExpr({ kind: 'trig', fn: 'sen', num: c1, den: 1, inner: 1 });
+            const t2 = createExpr({ kind: 'trig', fn: 'cos', num: c2, den: 1, inner: 1 });
+            return {
+              expr: createExpr({ kind: 'combo', comboTerms: [t1, t2] }),
+              family: 'trig_combo',
+              tag: 'Mestre • Combinação Trigonométrica'
+            };
+          } else if (roll < 0.68) {
+            return genChainTrig();
+          } else if (roll < 0.85) {
+            if (Math.random() < 0.5) {
+              const a = pick([1, 2, 3]);
+              return {
+                expr: createExpr({ kind: 'exp', num: pick([1, 2, -1]), den: 1, inner: a }),
+                family: 'exp_ln',
+                tag: 'Mestre • Exponencial eᵃˣ'
+              };
+            } else {
+              return {
+                expr: createExpr({ kind: 'inv', num: pick([1, -1, 2]), den: 1, power: 1 }),
+                family: 'exp_ln',
+                tag: 'Mestre • Inversa 1/x e ln|x|'
+              };
+            }
+          } else {
+            const fn = dir === 'ida' ? 'cotg' : 'cosec2';
+            return {
+              expr: createExpr({ kind: 'trig', fn, num: pick([1, -1, 2]), den: 1, inner: 1 }),
+              family: 'tg',
+              tag: 'Mestre • Co-funções'
+            };
+          }
+        };
+
+        // Seleção por filtro (Modo Exploração vs Níveis do Modo Aventura/Blitz)
+        for (let attempt = 0; attempt < 18; attempt++) {
+          let generated;
+          if (topicFilter === 'trig_basic') {
+            generated = genPureSenCosTg();
+          } else if (topicFilter === 'trig' || topicFilter === 'trig_adapt') {
+            const subRoll = Math.random();
+            if (weakFamily === 'chain' && subRoll < 0.45) {
+              generated = genChainTrig();
+            } else if (masteredSenCos) {
+              if (subRoll < 0.28) generated = genPureSenCosTg();
+              else if (subRoll < 0.65) generated = genCoeffTrig();
+              else generated = genChainTrig();
+            } else {
+              if (subRoll < 0.5) generated = genPureSenCosTg();
+              else if (subRoll < 0.82) generated = genCoeffTrig();
+              else generated = genChainTrig();
+            }
+          } else if (topicFilter === 'trig_coeff') {
+            generated = genCoeffTrig();
+          } else if (topicFilter === 'trig_chain') {
+            generated = genChainTrig();
+          } else if (topicFilter === 'poly') {
+            const p = pick([1, 2, 3, 4, 5]);
+            const c = pick([1, 2, 3, 4, -2]);
+            generated = {
+              expr: createExpr({ kind: 'poly', num: c, den: 1, power: p }),
+              family: 'poly',
+              tag: 'Polinomiais • k·xⁿ'
+            };
+          } else {
+            // Segue o nível atual (1 a 5) com reforço adaptativo
+            if (level === 1) {
+              generated = Math.random() < 0.75 ? genBasicTrig() : genBasicPoly();
+            } else if (level === 2) {
+              generated = genLevel2Trig();
+            } else if (level === 3) {
+              generated = genCoeffTrig();
+            } else if (level === 4) {
+              generated = genChainTrig();
+            } else {
+              generated = genMasterLevel();
+            }
+          }
+
+          const promptExpr = generated.expr;
+          const correctExpr = dir === 'ida' ? computeDerivative(promptExpr) : computeIntegral(promptExpr);
+          const qSig = `${dir}:${getCanonicalSignature(promptExpr)}`;
+
+          if (!recentSigs.includes(qSig) || attempt === 17) {
+            const distractors = buildDistractors(promptExpr, dir, correctExpr).slice(0, Math.max(1, optionsCount - 1));
+            const allOptions = [correctExpr, ...distractors];
+
+            // Embaralhar alternativas
+            for (let i = allOptions.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+            }
+
+            const feedback = buildFeedback(promptExpr, dir, correctExpr);
+
+            return {
+              sig: qSig,
+              dir,
+              level,
+              family: generated.family,
+              tag: generated.tag,
+              promptExpr,
+              correctExpr,
+              options: allOptions,
+              feedback
+            };
+          }
+        }
+      }
+
+      return {
+        createExpr,
+        areEquivalent,
+        renderExprHtml,
+        computeDerivative,
+        computeIntegral,
+        generateQuestion
+      };
+    })();
+
+    /**
+     * ============================================================================
+     * 2. CONQUISTAS, DESAFIOS RÁPIDOS E SISTEMA DE PROGRESSÃO
+     * ============================================================================
+     */
+    const ACHIEVEMENTS = [
+      { id: 'first_hit', icon: '🎯', name: 'Primeiro Acerto', desc: 'Acertou a 1ª questão', check: (s) => s.totalCorrect >= 1 },
+      { id: 'fast_mind', icon: '⚡', name: 'Mente Rápida', desc: 'Acertou em menos de 2.5s', check: (s) => s.fastHits >= 1 },
+      { id: 'streak_10', icon: '🔥', name: 'Sequência de 10', desc: 'Combo de 10 acertos', check: (s) => s.bestStreak >= 10 },
+      { id: 'deriv_master', icon: '📐', name: 'Mestre Derivadas', desc: '20 derivadas corretas', check: (s) => s.derivCorrect >= 20 },
+      { id: 'integ_master', icon: '∫', name: 'Mestre Integrais', desc: '20 integrais corretas', check: (s) => s.integCorrect >= 20 },
+      { id: 'trig_domain', icon: '🌊', name: 'Domínio Trig', desc: '25 trigonométricas certas', check: (s) => s.trigCorrect >= 25 },
+      { id: 'explorer_lab', icon: '🧪', name: 'Explorador Livre', desc: '15 questões no Exploração', check: (s) => s.exploreCount >= 15 },
+      { id: 'chain_tamer', icon: '🔗', name: 'Mestre da Cadeia', desc: '12 questões de cadeia certas', check: (s) => s.chainCorrect >= 12 }
+    ];
+
+    const STAGE_INFO = {
+      1: { badge: 'Nível 1', title: 'Básico: sen(x), cos(x) e xⁿ', target: 6 },
+      2: { badge: 'Nível 2', title: 'Trigonométricas: tg(x) e sec(x)', target: 6 },
+      3: { badge: 'Nível 3', title: 'Coeficientes: 2sen(x), -3cos(x), 4tg(x)', target: 7 },
+      4: { badge: 'Nível 4', title: 'Regra da Cadeia: sen(2x), cos(3x), tg(2x)', target: 8 },
+      5: { badge: 'Nível 5', title: 'Mestre: Combinações e Notáveis', target: 10 }
+    };
+
+    const STORAGE_KEY = 'reflexo_calculo_v2_state';
+
+    const state = {
+      // Configurações de jogo ativas
+      gameMode: 'aventura',     // 'aventura' | 'exploracao' | 'blitz'
+      directionMode: 'caos',    // 'ida' | 'volta' | 'caos'
+      stageSelection: 'progressivo', // 'progressivo' | '1'..'5'
+      currentStage: 1,
+      stageProgress: 0,
+      exploreTopic: 'trig_adapt', // 'trig_adapt' | 'trig_basic' | 'trig_coeff' | 'trig_chain' | 'poly' | 'all'
+      optionsCount: 4,          // 4 ou 2 alternativas
+      soundEnabled: true,
+
+      // Estado da partida atual
+      lives: 3,
+      streak: 0,
+      score: 0,
+      exploreSessionTotal: 0,
+      exploreSessionCorrect: 0,
+
+      // Estado do cronômetro Blitz
+      blitzSeconds: 10,
+      blitzInterval: null,
+      questionStartTime: 0,
+
+      // Estatísticas Persistentes e XP
+      xp: 0,
+      highScore: 0,
+      bestStreak: 0,
+      totalResolved: 0,
+      totalCorrect: 0,
+      totalResponseTimeMs: 0,
+      fastHits: 0,
+      derivTotal: 0,
+      derivCorrect: 0,
+      integTotal: 0,
+      integCorrect: 0,
+      trigTotal: 0,
+      trigCorrect: 0,
+      chainCorrect: 0,
+      exploreCount: 0,
+      familyStats: {
+        sen: { hits: 0, misses: 0 },
+        cos: { hits: 0, misses: 0 },
+        tg: { hits: 0, misses: 0 },
+        chain: { hits: 0, misses: 0 },
+        poly: { hits: 0, misses: 0 }
+      },
+      unlockedBadges: [],
+
+      // Desafio rápido dinâmico
+      activeQuest: { type: 'streak', target: 3, progress: 0, rewardXp: 40, text: 'Acerte 3 questões seguidas' },
+
+      // Controle de questão em tela
+      currentQuestion: null,
+      recentSigs: [],
+      awaitingNext: false,
+      autoAdvanceTimer: null
+    };
+
+    // SINTETIZADOR DE ÁUDIO LEVE (Web Audio API)
+    let audioCtx = null;
+    function playSound(kind) {
+      if (!state.soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (kind === 'hit') {
+          const f = 500 + Math.min(state.streak * 24, 360);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now);
+          osc.frequency.exponentialRampToValueAtTime(f * 1.25, now + 0.11);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+          osc.start(now);
+          osc.stop(now + 0.13);
+        } else if (kind === 'miss') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(195, now);
+          osc.frequency.linearRampToValueAtTime(135, now + 0.2);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } else if (kind === 'levelup') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.setValueAtTime(554, now + 0.08);
+          osc.frequency.setValueAtTime(659, now + 0.16);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+          osc.start(now);
+          osc.stop(now + 0.32);
+        }
+      } catch (_) {}
+    }
+
+    // PERSISTÊNCIA LOCAL
+    function loadSavedData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const d = JSON.parse(raw);
+        state.xp = d.xp || 0;
+        state.highScore = d.highScore || 0;
+        state.bestStreak = d.bestStreak || 0;
+        state.totalResolved = d.totalResolved || 0;
+        state.totalCorrect = d.totalCorrect || 0;
+        state.totalResponseTimeMs = d.totalResponseTimeMs || 0;
+        state.fastHits = d.fastHits || 0;
+        state.derivTotal = d.derivTotal || 0;
+        state.derivCorrect = d.derivCorrect || 0;
+        state.integTotal = d.integTotal || 0;
+        state.integCorrect = d.integCorrect || 0;
+        state.trigTotal = d.trigTotal || 0;
+        state.trigCorrect = d.trigCorrect || 0;
+        state.chainCorrect = d.chainCorrect || 0;
+        state.exploreCount = d.exploreCount || 0;
+        state.currentStage = d.currentStage || 1;
+        if (d.familyStats) state.familyStats = { ...state.familyStats, ...d.familyStats };
+        if (Array.isArray(d.unlockedBadges)) state.unlockedBadges = d.unlockedBadges;
+      } catch (_) {}
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            xp: state.xp,
+            highScore: state.highScore,
+            bestStreak: state.bestStreak,
+            totalResolved: state.totalResolved,
+            totalCorrect: state.totalCorrect,
+            totalResponseTimeMs: state.totalResponseTimeMs,
+            fastHits: state.fastHits,
+            derivTotal: state.derivTotal,
+            derivCorrect: state.derivCorrect,
+            integTotal: state.integTotal,
+            integCorrect: state.integCorrect,
+            trigTotal: state.trigTotal,
+            trigCorrect: state.trigCorrect,
+            chainCorrect: state.chainCorrect,
+            exploreCount: state.exploreCount,
+            currentStage: state.currentStage,
+            familyStats: state.familyStats,
+            unlockedBadges: state.unlockedBadges
+          })
+        );
+      } catch (_) {}
+    }
+
+    function showToast(icon, title) {
+      const container = document.getElementById('toastContainer');
+      const card = document.createElement('div');
+      card.className = 'toast-card';
+      card.innerHTML = `<span style="font-size:1.25rem">${icon}</span><span>${title}</span>`;
+      container.appendChild(card);
+      setTimeout(() => {
+        card.remove();
+      }, 3100);
+    }
+
+    function checkAchievements() {
+      let newlyUnlocked = false;
+      ACHIEVEMENTS.forEach((ach) => {
+        if (!state.unlockedBadges.includes(ach.id) && ach.check(state)) {
+          state.unlockedBadges.push(ach.id);
+          newlyUnlocked = true;
+          showToast(ach.icon, `Conquista Desbloqueada: ${ach.name}!`);
+        }
+      });
+      if (newlyUnlocked) saveData();
+    }
+
+    function rotateQuest() {
+      const quests = [
+        { type: 'streak', target: 4, progress: 0, rewardXp: 50, text: 'Desafio: Acerte 4 questões seguidas' },
+        { type: 'integ', target: 3, progress: 0, rewardXp: 45, text: 'Desafio: Acerte 3 integrais' },
+        { type: 'deriv', target: 3, progress: 0, rewardXp: 45, text: 'Desafio: Acerte 3 derivadas' },
+        { type: 'trig', target: 4, progress: 0, rewardXp: 50, text: 'Desafio: Acerte 4 trigonométricas' }
+      ];
+      state.activeQuest = quests[Math.floor(Math.random() * quests.length)];
+    }
+
+    function updateQuestOnAnswer(isCorrect, q) {
+      const quest = state.activeQuest;
+      if (!isCorrect) {
+        if (quest.type === 'streak') quest.progress = 0;
+        return;
+      }
+      if (quest.type === 'streak') quest.progress += 1;
+      else if (quest.type === 'integ' && q.dir === 'volta') quest.progress += 1;
+      else if (quest.type === 'deriv' && q.dir === 'ida') quest.progress += 1;
+      else if (quest.type === 'trig' && q.promptExpr.kind === 'trig') quest.progress += 1;
+
+      if (quest.progress >= quest.target) {
+        state.xp += quest.rewardXp;
+        showToast('🌟', `Desafio concluído! +${quest.rewardXp} XP`);
+        rotateQuest();
+      }
+    }
+
+    function getMultiplier() {
+      if (state.streak >= 15) return 4;
+      if (state.streak >= 10) return 3;
+      if (state.streak >= 5) return 2;
+      return 1;
+    }
+
+    // IDENTIFICAÇÃO ADAPTATIVA DE CONTEÚDO COM MAIOR DIFICULDADE
+    function getWeakestFamily() {
+      let worstKey = null;
+      let maxMissRatio = 0;
+      for (const [key, st] of Object.entries(state.familyStats)) {
+        const total = st.hits + st.misses;
+        if (total >= 2 && st.misses > 0) {
+          const ratio = st.misses / total;
+          if (ratio > maxMissRatio) {
+            maxMissRatio = ratio;
+            worstKey = key;
+          }
+        }
+      }
+      return worstKey;
+    }
+
+    function generateDiagnosticText() {
+      if (state.totalResolved < 3) {
+        return 'Responda mais algumas questões para mapearmos sua evolução em derivadas e integrais.';
+      }
+      const derivRate = state.derivTotal > 0 ? state.derivCorrect / state.derivTotal : 1;
+      const integRate = state.integTotal > 0 ? state.integCorrect / state.integTotal : 1;
+
+      if (state.integTotal >= 3 && integRate + 0.18 < derivRate) {
+        return 'Você está errando mais questões de integrais. Atenção à troca de sinal ao integrar sen(x) e ao dividir por "a" na regra da cadeia!';
+      }
+      if (state.derivTotal >= 3 && derivRate + 0.18 < integRate) {
+        return 'Você está errando mais em derivadas. Lembre-se que funções iniciadas com "CO" (cos) ganham sinal negativo ao derivar!';
+      }
+
+      const weak = getWeakestFamily();
+      if (weak === 'tg') {
+        return 'Ponto de atenção em tangente: d/dx[tg(x)] = sec²(x) e ∫tg(x)dx = -ln|cos(x)| + C.';
+      }
+      if (weak === 'chain') {
+        return 'Pratique a Regra da Cadeia: multiplique por "a" na derivada e divida por "a" na integral de f(ax).';
+      }
+      if (weak === 'sen' || weak === 'cos') {
+        return 'Cuidado com a inversão de sinais entre seno e cosseno! Use o Modo Exploração para fixar o padrão.';
+      }
+
+      return 'Excelente consistência! Seu reconhecimento de padrões em seno, cosseno e tangente está evoluindo muito bem.';
+    }
+
+    // ATUALIZAÇÃO COMPLETA DO HUD E PAINÉIS
+    function updateUI() {
+      // XP e Nível do Jogador no Topo
+      const playerLvl = Math.floor(state.xp / 150) + 1;
+      const xpInLevel = state.xp % 150;
+      document.getElementById('playerRankText').textContent = `Nv. ${playerLvl}`;
+      document.getElementById('playerXpFill').style.width = `${Math.round((xpInLevel / 150) * 100)}%`;
+      document.getElementById('playerXpText').textContent = `${state.xp} XP`;
+
+      // Controles contextuais por Modo de Jogo
+      const exploreFilters = document.getElementById('exploreFilters');
+      const levelSelectWrap = document.getElementById('levelSelectWrap');
+      const hudLifeLabel = document.getElementById('hudLifeLabel');
+      const hudLifeContent = document.getElementById('hudLifeContent');
+      const statusBarCard = document.getElementById('statusBarCard');
+      const blitzBarWrap = document.getElementById('blitzBarWrap');
+
+      if (state.gameMode === 'exploracao') {
+        exploreFilters.classList.add('visible');
+        levelSelectWrap.style.display = 'none';
+        hudLifeLabel.textContent = 'Modo Livre';
+        hudLifeContent.innerHTML = `<span class="free-mode-badge">∞ Sem Vidas</span>`;
+        statusBarCard.style.display = 'flex';
+        document.getElementById('statusBadge').textContent = '🧪 Laboratório';
+        const expAcc =
+          state.exploreSessionTotal === 0
+            ? 100
+            : Math.round((state.exploreSessionCorrect / state.exploreSessionTotal) * 100);
+        document.getElementById('statusTitleText').textContent = `Sessão Livre (${expAcc}% acerto)`;
+        document.getElementById('statusFill').style.width = `${expAcc}%`;
+        document.getElementById('statusCounter').textContent = `${state.exploreSessionTotal} resp.`;
+        blitzBarWrap.classList.remove('active');
+      } else {
+        exploreFilters.classList.remove('visible');
+        levelSelectWrap.style.display = 'flex';
+        hudLifeLabel.textContent = 'Vidas';
+        hudLifeContent.innerHTML = `
+          <div class="hearts-row">
+            <span class="heart ${state.lives < 1 ? 'lost' : ''}">❤️</span>
+            <span class="heart ${state.lives < 2 ? 'lost' : ''}">❤️</span>
+            <span class="heart ${state.lives < 3 ? 'lost' : ''}">❤️</span>
+          </div>
+        `;
+
+        const activeLvl =
+          state.stageSelection === 'progressivo'
+            ? state.currentStage
+            : parseInt(state.stageSelection, 10);
+        const info = STAGE_INFO[activeLvl] || STAGE_INFO[1];
+        statusBarCard.style.display = 'flex';
+        document.getElementById('statusBadge').textContent = info.badge;
+        document.getElementById('statusTitleText').textContent = info.title;
+        const pct =
+          state.stageSelection === 'progressivo'
+            ? Math.min(100, Math.round((state.stageProgress / info.target) * 100))
+            : 100;
+        document.getElementById('statusFill').style.width = `${pct}%`;
+        document.getElementById('statusCounter').textContent =
+          state.stageSelection === 'progressivo' ? `${state.stageProgress}/${info.target}` : 'Fixo';
+
+        blitzBarWrap.classList.toggle('active', state.gameMode === 'blitz');
+      }
+
+      // Combo e Multiplicador
+      document.getElementById('streakVal').textContent = state.streak;
+      const mult = getMultiplier();
+      const multTag = document.getElementById('multTag');
+      multTag.textContent = `x${mult}`;
+      multTag.className = `mult-tag ${mult > 1 ? 'x' + mult : ''}`;
+
+      // Pontuação e Recorde
+      document.getElementById('hudScoreLabel').textContent = `Pontos (Rec: ${state.highScore})`;
+      document.getElementById('scoreVal').textContent = state.score;
+
+      // Desafio Rápido
+      document.getElementById('questTitle').textContent = state.activeQuest.text;
+      document.getElementById('questProg').textContent = `${state.activeQuest.progress}/${state.activeQuest.target} (+${state.activeQuest.rewardXp} XP)`;
+
+      // Estatísticas Laterais
+      document.getElementById('statTotal').textContent = state.totalResolved;
+      const globalAcc =
+        state.totalResolved === 0
+          ? 100
+          : Math.round((state.totalCorrect / state.totalResolved) * 100);
+      document.getElementById('statAcc').textContent = `${globalAcc}%`;
+      document.getElementById('statBestStreak').textContent = `${state.bestStreak} 🔥`;
+
+      if (state.totalResolved > 0) {
+        const avgSec = (state.totalResponseTimeMs / state.totalResolved / 1000).toFixed(1);
+        document.getElementById('statAvgTime').textContent = `${avgSec}s`;
+      } else {
+        document.getElementById('statAvgTime').textContent = '--';
+      }
+
+      const dAcc = state.derivTotal === 0 ? 100 : Math.round((state.derivCorrect / state.derivTotal) * 100);
+      document.getElementById('perfDerivText').textContent = `${dAcc}% (${state.derivCorrect}/${state.derivTotal})`;
+      document.getElementById('perfDerivFill').style.width = `${dAcc}%`;
+
+      const iAcc = state.integTotal === 0 ? 100 : Math.round((state.integCorrect / state.integTotal) * 100);
+      document.getElementById('perfIntegText').textContent = `${iAcc}% (${state.integCorrect}/${state.integTotal})`;
+      document.getElementById('perfIntegFill').style.width = `${iAcc}%`;
+
+      const tAcc = state.trigTotal === 0 ? 100 : Math.round((state.trigCorrect / state.trigTotal) * 100);
+      document.getElementById('perfTrigText').textContent = `${tAcc}%`;
+      document.getElementById('perfTrigFill').style.width = `${tAcc}%`;
+
+      document.getElementById('learningInsightText').textContent = generateDiagnosticText();
+
+      // Conquistas
+      const badgesGrid = document.getElementById('badgesGrid');
+      badgesGrid.innerHTML = '';
+      ACHIEVEMENTS.forEach((ach) => {
+        const unlocked = state.unlockedBadges.includes(ach.id);
+        const div = document.createElement('div');
+        div.className = `badge-item ${unlocked ? 'unlocked' : ''}`;
+        div.innerHTML = `
+          <span class="badge-icon">${ach.icon}</span>
+          <div class="badge-info">
+            <span class="badge-name">${ach.name}</span>
+            <span class="badge-desc">${ach.desc}</span>
+          </div>
+        `;
+        badgesGrid.appendChild(div);
+      });
+      document.getElementById('unlockedCountText').textContent = `${state.unlockedBadges.length}/${ACHIEVEMENTS.length}`;
+    }
+
+    // CRONÔMETRO DO MODO BLITZ
+    function stopBlitzTimer() {
+      if (state.blitzInterval) {
+        clearInterval(state.blitzInterval);
+        state.blitzInterval = null;
+      }
+    }
+
+    function startBlitzTimer() {
+      stopBlitzTimer();
+      if (state.gameMode !== 'blitz') return;
+
+      const totalMs = state.blitzSeconds * 1000;
+      const start = performance.now();
+      const numEl = document.getElementById('blitzTimeNum');
+      const barEl = document.getElementById('blitzProgressInner');
+
+      numEl.textContent = '10.0s';
+      numEl.classList.remove('urgent');
+      barEl.style.width = '100%';
+      barEl.classList.remove('urgent');
+
+      state.blitzInterval = setInterval(() => {
+        const elapsed = performance.now() - start;
+        const remMs = Math.max(0, totalMs - elapsed);
+        const ratio = remMs / totalMs;
+
+        numEl.textContent = `${(remMs / 1000).toFixed(1)}s`;
+        barEl.style.width = `${ratio * 100}%`;
+
+        if (ratio < 0.3) {
+          numEl.classList.add('urgent');
+          barEl.classList.add('urgent');
+        }
+        if (remMs <= 0) {
+          stopBlitzTimer();
+          handleOptionSelection(null, null, true);
+        }
+      }, 50);
+    }
+
+    // SORTEIO E RENDERIZAÇÃO DE NOVA QUESTÃO
+    function nextQuestion() {
+      clearTimeout(state.autoAdvanceTimer);
+      stopBlitzTimer();
+      state.awaitingNext = false;
+
+      const feedbackBanner = document.getElementById('feedbackBanner');
+      feedbackBanner.className = 'feedback-banner';
+
+      const dir =
+        state.directionMode === 'caos'
+          ? Math.random() < 0.5
+            ? 'ida'
+            : 'volta'
+          : state.directionMode;
+
+      const activeLevel =
+        state.stageSelection === 'progressivo'
+          ? state.currentStage
+          : parseInt(state.stageSelection, 10);
+
+      const topicFilter = state.gameMode === 'exploracao' ? state.exploreTopic : 'all';
+      const weakFamily = getWeakestFamily();
+
+      const q = MathEngine.generateQuestion({
+        level: activeLevel,
+        dir,
+        topicFilter,
+        recentSigs: state.recentSigs,
+        weakFamily,
+        optionsCount: state.optionsCount,
+        familyStats: state.familyStats
+      });
+
+      state.currentQuestion = q;
+      state.recentSigs.push(q.sig);
+      if (state.recentSigs.length > 8) state.recentSigs.shift();
+
+      const arenaCard = document.getElementById('arenaCard');
+      arenaCard.className = `arena-card ${dir === 'ida' ? 'op-ida' : 'op-volta'}`;
+
+      const opBadge = document.getElementById('opBadge');
+      const promptSubtitle = document.getElementById('promptSubtitle');
+      const mathDisplay = document.getElementById('mathDisplay');
+
+      const funcHtml = MathEngine.renderExprHtml(q.promptExpr, false);
+      if (dir === 'ida') {
+        opBadge.className = 'op-badge ida';
+        opBadge.textContent = "➔ DERIVADA (f ➔ f')";
+        promptSubtitle.textContent = 'Qual é a derivada em relação a x?';
+        mathDisplay.innerHTML = `<span class="deriv-sym"><span class="frac"><span class="num">d</span><span class="den">dx</span></span></span><span>[ ${funcHtml} ]</span>`;
+      } else {
+        opBadge.className = 'op-badge volta';
+        opBadge.textContent = '⬅ INTEGRAL (∫ f dx)';
+        promptSubtitle.textContent = 'Qual é a antiderivada F(x) + C?';
+        const needsParens = q.promptExpr.kind === 'combo';
+        mathDisplay.innerHTML = `<span class="integral-sym">∫</span><span>${
+          needsParens ? '(' + funcHtml + ')' : funcHtml
+        } dx</span>`;
+      }
+
+      document.getElementById('topicTag').textContent = q.tag;
+
+      const optionsGrid = document.getElementById('optionsGrid');
+      optionsGrid.innerHTML = '';
+      q.options.forEach((optExpr, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.dataset.index = idx;
+        btn.innerHTML = `
+          <span class="option-math">${MathEngine.renderExprHtml(optExpr, true)}</span>
+          <span class="key-badge">${idx + 1}</span>
+        `;
+        btn.addEventListener('click', () => handleOptionSelection(optExpr, btn, false));
+        optionsGrid.appendChild(btn);
+      });
+
+      state.questionStartTime = performance.now();
+      updateUI();
+      startBlitzTimer();
+    }
+
+    // VERIFICAÇÃO DE RESPOSTA (USANDO EQUIVALÊNCIA MATEMÁTICA ESTRUTURADA)
+    function handleOptionSelection(selectedExpr, clickedBtn, isTimeout = false) {
+      if (state.awaitingNext) return;
+      stopBlitzTimer();
+      state.awaitingNext = true;
+
+      const q = state.currentQuestion;
+      const elapsedMs = Math.max(100, performance.now() - state.questionStartTime);
+      const isCorrect = !isTimeout && MathEngine.areEquivalent(selectedExpr, q.correctExpr);
+
+      state.totalResolved += 1;
+      state.totalResponseTimeMs += Math.min(elapsedMs, 15000);
+      if (q.dir === 'ida') state.derivTotal += 1;
+      else state.integTotal += 1;
+      if (q.promptExpr.kind === 'trig') state.trigTotal += 1;
+      if (state.gameMode === 'exploracao') {
+        state.exploreCount += 1;
+        state.exploreSessionTotal += 1;
+      }
+
+      const famStat = state.familyStats[q.family];
+
+      // Destacar botões na tela
+      const allBtns = document.querySelectorAll('#optionsGrid .option-btn');
+      allBtns.forEach((btn) => {
+        btn.disabled = true;
+        const optObj = q.options[parseInt(btn.dataset.index, 10)];
+        if (MathEngine.areEquivalent(optObj, q.correctExpr)) {
+          btn.classList.add('correct');
+        }
+      });
+
+      const arenaCard = document.getElementById('arenaCard');
+      const feedbackBanner = document.getElementById('feedbackBanner');
+      const feedbackHeadline = document.getElementById('feedbackHeadline');
+      const feedbackTip = document.getElementById('feedbackTip');
+
+      if (isCorrect) {
+        state.totalCorrect += 1;
+        state.streak += 1;
+        if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+        if (elapsedMs <= 2500) state.fastHits += 1;
+        if (q.dir === 'ida') state.derivCorrect += 1;
+        else state.integCorrect += 1;
+        if (q.promptExpr.kind === 'trig') state.trigCorrect += 1;
+        if (q.family === 'chain') state.chainCorrect += 1;
+        if (state.gameMode === 'exploracao') state.exploreSessionCorrect += 1;
+        if (famStat) famStat.hits += 1;
+
+        const mult = getMultiplier();
+        const speedBonus = elapsedMs < 3500 ? 5 : 0;
+        const ptsGained = (10 + speedBonus) * mult;
+        state.score += ptsGained;
+        if (state.score > state.highScore) state.highScore = state.score;
+        state.xp += 12 + mult * 3;
+
+        arenaCard.classList.add('state-correct');
+        playSound('hit');
+
+        // Progressão de Nível no Modo Aventura / Blitz
+        let leveledUp = false;
+        if (state.gameMode !== 'exploracao' && state.stageSelection === 'progressivo' && state.currentStage < 5) {
+          state.stageProgress += 1;
+          const target = STAGE_INFO[state.currentStage].target;
+          if (state.stageProgress >= target) {
+            state.currentStage += 1;
+            state.stageProgress = 0;
+            leveledUp = true;
+            playSound('levelup');
+            showToast('🚀', `Subiu para o ${STAGE_INFO[state.currentStage].badge}!`);
+          }
+        }
+
+        updateQuestOnAnswer(true, q);
+        checkAchievements();
+        saveData();
+        updateUI();
+
+        // No Modo Exploração, exibe sempre o feedback positivo curto reforçando o padrão!
+        if (state.gameMode === 'exploracao' || leveledUp) {
+          feedbackBanner.className = `feedback-banner visible ${leveledUp ? 'fb-levelup' : 'fb-correct'}`;
+          feedbackHeadline.innerHTML = leveledUp
+            ? `🎉 Avançou para o ${STAGE_INFO[state.currentStage].badge}!`
+            : `✅ ${q.feedback.hitHeadline}`;
+          feedbackTip.innerHTML = q.feedback.tip;
+
+          state.autoAdvanceTimer = setTimeout(() => {
+            if (state.awaitingNext) nextQuestion();
+          }, 1450);
+        } else {
+          state.autoAdvanceTimer = setTimeout(() => {
+            if (state.awaitingNext) nextQuestion();
+          }, 380);
+        }
+      } else {
+        if (clickedBtn) clickedBtn.classList.add('wrong');
+        arenaCard.classList.add('state-wrong');
+        playSound('miss');
+
+        state.streak = 0;
+        if (famStat) famStat.misses += 1;
+        updateQuestOnAnswer(false, q);
+
+        if (state.gameMode !== 'exploracao') {
+          state.lives -= 1;
+        }
+
+        if (state.gameMode !== 'exploracao' && state.lives <= 0) {
+          // Reinício fluido do ciclo de 3 vidas sem bloquear o loop infinito
+          feedbackBanner.className = 'feedback-banner visible fb-wrong';
+          feedbackHeadline.innerHTML = `💔 3 Vidas Perdidas! Ciclo reiniciado (Pontuação: ${state.score} | Recorde: ${state.highScore}).`;
+          feedbackTip.innerHTML = `${q.feedback.missHeadline} <strong>Dica:</strong> ${q.feedback.tip}`;
+          state.lives = 3;
+          state.score = 0;
+          state.stageProgress = 0;
+        } else {
+          feedbackBanner.className = 'feedback-banner visible fb-wrong';
+          feedbackHeadline.innerHTML = isTimeout
+            ? `⏱️ Tempo esgotado! ${q.feedback.missHeadline}`
+            : `❌ ${q.feedback.missHeadline}`;
+          feedbackTip.innerHTML = `💡 ${q.feedback.tip}`;
+        }
+
+        saveData();
+        updateUI();
+      }
+    }
+
+    // CONFIGURAÇÃO DE EVENTOS E NAVEGAÇÃO
+    function bindEvents() {
+      // Seleção dos 3 Modos de Jogo (Aventura, Exploração, Blitz)
+      const modeTabs = document.querySelectorAll('.mode-tab[data-game-mode]');
+      modeTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          modeTabs.forEach((t) => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          state.gameMode = tab.dataset.gameMode;
+          state.lives = 3;
+          nextQuestion();
+        });
+      });
+
+      // Direção (Derivadas, Integrais, Misto)
+      const dirBtns = document.querySelectorAll('.dir-btn[data-dir]');
+      dirBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          dirBtns.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.directionMode = btn.dataset.dir;
+          nextQuestion();
+        });
+      });
+
+      // Seletor de Nível (Aventura / Blitz)
+      const stageSelect = document.getElementById('stageSelect');
+      stageSelect.addEventListener('change', (e) => {
+        state.stageSelection = e.target.value;
+        state.stageProgress = 0;
+        nextQuestion();
+      });
+
+      // Quantidade de alternativas (4 ou 2)
+      const optCountBtn = document.getElementById('optCountBtn');
+      optCountBtn.addEventListener('click', () => {
+        state.optionsCount = state.optionsCount === 4 ? 2 : 4;
+        document.getElementById('optCountText').textContent = `${state.optionsCount} Opções`;
+        nextQuestion();
+      });
+
+      // Filtros de Conteúdo do Modo Exploração
+      const topicChips = document.querySelectorAll('.topic-chip[data-topic]');
+      topicChips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          topicChips.forEach((c) => c.classList.remove('active'));
+          chip.classList.add('active');
+          state.exploreTopic = chip.dataset.topic;
+          nextQuestion();
+        });
+      });
+
+      // Botão Continuar no Banner de Feedback
+      document.getElementById('continueBtn').addEventListener('click', () => {
+        nextQuestion();
+      });
+
+      // Toggle de Estatísticas no Mobile
+      const mobileStatsToggle = document.getElementById('mobileStatsToggle');
+      const sidebarPanel = document.getElementById('sidebarPanel');
+      mobileStatsToggle.addEventListener('click', () => {
+        const expanded = sidebarPanel.classList.toggle('mobile-expanded');
+        mobileStatsToggle.textContent = expanded
+          ? '📊 Ocultar Estatísticas e Conquistas ▴'
+          : '📊 Ver Estatísticas, Desempenho e Conquistas ▾';
+      });
+
+      // Som e Tema
+      const soundBtn = document.getElementById('soundBtn');
+      soundBtn.addEventListener('click', () => {
+        state.soundEnabled = !state.soundEnabled;
+        soundBtn.textContent = state.soundEnabled ? '🔊' : '🔇';
+      });
+
+      document.getElementById('themeBtn').addEventListener('click', () => {
+        const root = document.documentElement;
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        root.setAttribute('data-theme', next);
+      });
+
+      // Modal de Cola Mental
+      const helpModal = document.getElementById('helpModal');
+      document.getElementById('helpBtn').addEventListener('click', () => {
+        helpModal.classList.add('open');
+      });
+      document.getElementById('closeHelpBtn').addEventListener('click', () => {
+        helpModal.classList.remove('open');
+      });
+      helpModal.addEventListener('click', (e) => {
+        if (e.target === helpModal) helpModal.classList.remove('open');
+      });
+
+      // Zerar Estatísticas
+      document.getElementById('resetStatsBtn').addEventListener('click', () => {
+        state.xp = 0;
+        state.highScore = 0;
+        state.bestStreak = 0;
+        state.totalResolved = 0;
+        state.totalCorrect = 0;
+        state.totalResponseTimeMs = 0;
+        state.fastHits = 0;
+        state.derivTotal = 0;
+        state.derivCorrect = 0;
+        state.integTotal = 0;
+        state.integCorrect = 0;
+        state.trigTotal = 0;
+        state.trigCorrect = 0;
+        state.chainCorrect = 0;
+        state.exploreCount = 0;
+        state.score = 0;
+        state.streak = 0;
+        state.lives = 3;
+        state.unlockedBadges = [];
+        saveData();
+        updateUI();
+      });
+
+      // Atalhos de Teclado para Desktop (1-4, Espaço/Enter, M, H)
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && helpModal.classList.contains('open')) {
+          helpModal.classList.remove('open');
+          return;
+        }
+        if (state.awaitingNext && (e.key === ' ' || e.key === 'Enter')) {
+          e.preventDefault();
+          nextQuestion();
+          return;
+        }
+        if (['1', '2', '3', '4'].includes(e.key) && !state.awaitingNext) {
+          e.preventDefault();
+          const idx = parseInt(e.key, 10) - 1;
+          const btn = document.querySelector(`#optionsGrid .option-btn[data-index="${idx}"]`);
+          if (btn) btn.click();
+        } else if (e.key.toLowerCase() === 'h') {
+          e.preventDefault();
+          helpModal.classList.toggle('open');
+        } else if (e.key.toLowerCase() === 'm') {
+          e.preventDefault();
+          const dirs = ['ida', 'volta', 'caos'];
+          const nextDir = dirs[(dirs.indexOf(state.directionMode) + 1) % dirs.length];
+          const btn = document.querySelector(`.dir-btn[data-dir="${nextDir}"]`);
+          if (btn) btn.click();
+        }
+      });
+    }
+
+    // INICIALIZAÇÃO
+    loadSavedData();
+    bindEvents();
+    nextQuestion();
+  </script>
+</body>
+</html>
