@@ -1,0 +1,118 @@
+/* ==========================================================================
+   BASE STYLES & MATHEMATICAL TYPOGRAPHY
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.45;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+button,
+select,
+input {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* Mathematical Fractions & Operators */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  font-size: 0.82em;
+  line-height: 1.05;
+  margin: 0 0.1em;
+}
+
+.frac .num {
+  border-bottom: 1.5px solid currentColor;
+  padding: 0 0.2em 0.06em;
+}
+
+.frac .den {
+  padding: 0.06em 0.2em 0;
+}
+
+.integral-sym {
+  font-size: 1.25em;
+  line-height: 1;
+  color: var(--color-secondary);
+  font-weight: 400;
+  margin-right: 0.08em;
+}
+
+.deriv-sym {
+  color: var(--color-primary);
+  margin-right: 0.12em;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.modal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.fill-primary {
+  width: 100%;
+  background: var(--color-primary);
+}
+
+.fill-secondary {
+  width: 100%;
+  background: var(--color-secondary);
+}
+
+.fill-explore {
+  width: 100%;
+  background: var(--color-explore);
+}

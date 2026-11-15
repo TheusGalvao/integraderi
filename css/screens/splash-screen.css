@@ -1,0 +1,120 @@
+/* ==========================================================================
+   SPLASH SCREEN (#screenSplash)
+   ========================================================================== */
+.splash-screen {
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem 1.25rem;
+  background: radial-gradient(circle at 50% 28%, rgba(56, 189, 248, 0.12), transparent 62%),
+              radial-gradient(circle at 80% 78%, rgba(245, 158, 11, 0.08), transparent 55%),
+              var(--bg-canvas);
+}
+
+/* Subtle Floating Math Symbols Background */
+.splash-bg-symbols {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.14;
+  font-family: var(--font-math);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.math-glyph {
+  position: absolute;
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.math-glyph.g1 { top: 12%; left: 10%; font-size: 2.6rem; animation-delay: 0s; }
+.math-glyph.g2 { top: 18%; right: 12%; font-size: 2rem; color: var(--color-secondary); animation-delay: 1.2s; }
+.math-glyph.g3 { bottom: 20%; left: 14%; font-size: 1.85rem; color: var(--color-explore); animation-delay: 2.1s; }
+.math-glyph.g4 { bottom: 15%; right: 10%; font-size: 2.4rem; animation-delay: 0.7s; }
+
+.splash-content {
+  position: relative;
+  z-index: 2;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.splash-logo-wrap {
+  width: 88px;
+  height: 88px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #070b12;
+  font-family: var(--font-math);
+  font-size: 2.65rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 32px rgba(56, 189, 248, 0.25);
+  animation: pulseSoft 3.2s ease-in-out infinite;
+}
+
+.splash-title {
+  font-size: clamp(1.85rem, 6vw, 2.35rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.splash-tagline {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.splash-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  max-width: 320px;
+}
+
+.splash-wave-svg {
+  width: 180px;
+  height: 28px;
+  opacity: 0.75;
+}
+
+.splash-saved-pill {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  padding: 0.38rem 0.9rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.splash-saved-pill.visible {
+  display: inline-flex;
+}
+
+.splash-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.35rem;
+}
+
+.splash-actions .btn-primary,
+.splash-actions .btn-secondary {
+  width: 100%;
+}

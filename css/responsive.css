@@ -1,0 +1,139 @@
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (320px -> 430px -> TABLET -> DESKTOP)
+   ========================================================================== */
+
+/* Ultra-compact Mobile (320px - 359px) */
+@media (max-width: 359px) {
+  .top-header {
+    padding: 0.4rem 0.55rem;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  .xp-amount-text {
+    display: none;
+  }
+
+  .answer-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .answer-btn {
+    min-height: 52px;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .math-stage-card {
+    padding: 1rem 0.55rem;
+    min-height: 96px;
+  }
+
+  .hub-quick-nav {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Standard Mobile (360px - 430px+) */
+@media (min-width: 360px) and (max-width: 679px) {
+  .xp-amount-text {
+    display: none;
+  }
+
+  .answer-grid.single-col-mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Landscape Mobile Ergonomics */
+@media (max-height: 520px) and (orientation: landscape) {
+  .splash-logo-wrap {
+    width: 60px;
+    height: 60px;
+    font-size: 1.85rem;
+  }
+
+  .math-stage-card {
+    padding: 0.7rem 0.65rem;
+    min-height: 76px;
+    margin-bottom: 0.55rem;
+  }
+
+  .answer-btn {
+    min-height: 48px;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Tablet & Up (>= 680px) */
+@media (min-width: 680px) {
+  .icon-btn-label {
+    display: inline;
+  }
+
+  .xp-bar-track {
+    width: 68px;
+  }
+
+  .modes-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .mode-card {
+    padding: 1.35rem 1.25rem;
+  }
+
+  .mode-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .setup-chips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modal-overlay {
+    align-items: center;
+    padding: 1.25rem;
+  }
+
+  .modal-sheet {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-default);
+    padding: 1.35rem 1.4rem;
+  }
+
+  .question-arena {
+    padding: 1.35rem 1.45rem;
+  }
+
+  .math-stage-card {
+    padding: 1.55rem 1.15rem;
+    min-height: 132px;
+  }
+
+  .answer-btn {
+    min-height: 66px;
+    padding: 0.85rem 1.1rem;
+  }
+
+  .answer-key-hint {
+    display: flex;
+  }
+}
+
+/* Desktop (>= 960px) */
+@media (min-width: 960px) {
+  .gameplay-workspace {
+    grid-template-columns: 1fr 340px;
+    padding: 1.1rem 1.25rem 1.75rem;
+    gap: 1.2rem;
+  }
+
+  .desktop-companion {
+    display: flex;
+  }
+}

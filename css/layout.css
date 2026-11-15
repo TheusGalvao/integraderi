@@ -1,0 +1,72 @@
+/* ==========================================================================
+   LAYOUT & SCREEN CONTAINER SYSTEM
+   ========================================================================== */
+.app-shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}
+
+.app-screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  animation: screenEnter 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.app-screen.active {
+  display: flex;
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.container-wide {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 0.85rem;
+}
+
+/* Toast Notification Stack */
+.toast-container {
+  position: fixed;
+  bottom: calc(1rem + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  pointer-events: none;
+  width: min(92vw, 390px);
+}
+
+.toast-card {
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--color-xp);
+  color: var(--text-primary);
+  padding: 0.7rem 0.95rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  animation: slideUpFade 0.22s ease;
+}
+
+.toast-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}

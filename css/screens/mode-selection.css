@@ -1,0 +1,128 @@
+/* ==========================================================================
+   MODE SELECTION HUB & MATCH SETUP (#screenModes)
+   ========================================================================== */
+.hub-body {
+  flex: 1;
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 1rem 0.9rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.hub-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.hub-greeting {
+  font-size: clamp(1.25rem, 4.5vw, 1.55rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.hub-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Active Quick Quest Banner on Hub */
+.hub-quest-banner {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-left: 3.5px solid var(--color-xp);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  font-size: 0.8rem;
+}
+
+.hub-quest-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.hub-quest-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hub-quest-reward {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--color-xp);
+  white-space: nowrap;
+}
+
+/* Mode Selection Cards Grid */
+.modes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+/* Secondary Quick Navigation Bar on Hub */
+.hub-quick-nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+  margin-top: 0.2rem;
+}
+
+.hub-nav-tile {
+  min-height: 52px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.hub-nav-tile:active {
+  transform: scale(0.97);
+}
+
+/* Match Setup Sheet Inside Modal */
+.setup-section {
+  margin-bottom: 1rem;
+}
+
+.setup-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 800;
+  margin-bottom: 0.45rem;
+}
+
+.setup-chips-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+}
+
+.setup-options-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}

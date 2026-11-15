@@ -1,0 +1,448 @@
+/* ==========================================================================
+   GAMEPLAY SCREEN (#screenGameplay)
+   ========================================================================== */
+.gameplay-workspace {
+  flex: 1;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0.65rem 0.75rem 1.15rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.match-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+/* Mode Identity Trigger Pill in Gameplay Header */
+.active-mode-trigger {
+  min-height: 36px;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  white-space: nowrap;
+}
+
+.mode-theme-aventura .active-mode-trigger {
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.mode-theme-exploracao .active-mode-trigger {
+  border-color: var(--color-explore-border);
+  color: var(--color-explore);
+  background: var(--color-explore-soft);
+}
+
+.mode-theme-blitz .active-mode-trigger {
+  border-color: var(--color-secondary-border);
+  color: var(--color-secondary);
+  background: var(--color-secondary-soft);
+}
+
+/* Match HUD Bar */
+.match-hud {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+}
+
+.hud-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.45rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.hud-card-label {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hud-card-val {
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.08rem;
+}
+
+.hearts-group {
+  display: inline-flex;
+  gap: 0.16rem;
+  font-size: 1.02rem;
+}
+
+.heart-icon {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.heart-icon.lost {
+  opacity: 0.18;
+  transform: scale(0.8);
+  filter: grayscale(1);
+}
+
+.free-pill {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--color-explore);
+}
+
+.combo-mult-badge {
+  font-size: 0.7rem;
+  padding: 0.08rem 0.38rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+.combo-mult-badge.x2 {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-color: var(--color-primary-border);
+}
+
+.combo-mult-badge.x3 {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+  border-color: var(--color-secondary-border);
+}
+
+.combo-mult-badge.x4 {
+  background: var(--color-xp-soft);
+  color: var(--color-xp);
+  border-color: var(--color-xp-border);
+}
+
+/* Progress / Mastery Strip */
+.match-progress-strip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.42rem 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.progress-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 0;
+}
+
+.stage-pill {
+  padding: 0.14rem 0.48rem;
+  border-radius: var(--radius-xs);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.mode-theme-exploracao .stage-pill {
+  color: var(--color-explore);
+}
+
+.mode-theme-blitz .stage-pill {
+  color: var(--color-secondary);
+}
+
+.stage-name-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+
+.stage-track {
+  flex: 1;
+  height: 7px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  min-width: 50px;
+}
+
+.stage-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transition: width 0.28s ease;
+}
+
+.mode-theme-exploracao .stage-fill {
+  background: linear-gradient(90deg, var(--color-explore), var(--color-primary));
+}
+
+.stage-count-text {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Protagonist Question Arena Card */
+.question-arena {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 0.95rem 0.85rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.question-arena.op-ida {
+  border-top: 4px solid var(--color-primary);
+}
+
+.question-arena.op-volta {
+  border-top: 4px solid var(--color-secondary);
+}
+
+.question-arena.state-correct {
+  border-color: var(--color-success) !important;
+  box-shadow: 0 0 0 3px var(--color-success-soft);
+}
+
+.question-arena.state-wrong {
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
+  animation: cardShake 0.28s ease;
+}
+
+/* Blitz Timer Strip inside Arena */
+.blitz-timer-box {
+  display: none;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.65rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--color-secondary-border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
+}
+
+.blitz-timer-box.active {
+  display: flex;
+}
+
+.blitz-clock-val {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--color-secondary);
+  min-width: 44px;
+}
+
+.blitz-clock-val.urgent {
+  color: var(--color-danger);
+}
+
+.blitz-bar-outer {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-canvas);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.blitz-bar-inner {
+  height: 100%;
+  width: 100%;
+  background: var(--color-secondary);
+  transition: background-color 0.15s ease;
+}
+
+.blitz-bar-inner.urgent {
+  background: var(--color-danger);
+}
+
+.arena-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.op-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.26rem 0.65rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.op-pill.ida {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-border);
+}
+
+.op-pill.volta {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+  border: 1px solid var(--color-secondary-border);
+}
+
+.concept-tag {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+/* Prominent Mathematical Expression Stage */
+.math-stage-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  margin-bottom: 0.85rem;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.math-prompt-instruction {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.math-formula-display {
+  font-family: var(--font-math);
+  font-size: clamp(1.68rem, 6vw, 2.38rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+/* Answer Options Grid */
+.answer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+/* Feedback Banner inside Arena */
+.feedback-dock {
+  margin-top: 0.75rem;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  animation: slideUpFade 0.16s ease;
+}
+
+.feedback-dock.visible {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.feedback-dock.fb-correct {
+  background: var(--color-success-soft);
+  border: 1px solid var(--color-success-border);
+}
+
+.feedback-dock.fb-wrong {
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger-border);
+}
+
+.feedback-dock.fb-levelup {
+  background: var(--color-xp-soft);
+  border: 1px solid var(--color-xp-border);
+}
+
+.feedback-copy {
+  flex: 1;
+  min-width: 195px;
+}
+
+.feedback-title {
+  font-weight: 800;
+  font-size: 0.84rem;
+  margin-bottom: 0.15rem;
+}
+
+.feedback-dock.fb-correct .feedback-title {
+  color: var(--color-success);
+}
+
+.feedback-dock.fb-wrong .feedback-title {
+  color: var(--color-danger);
+}
+
+.feedback-dock.fb-levelup .feedback-title {
+  color: var(--color-xp);
+}
+
+.feedback-detail {
+  font-size: 0.83rem;
+  color: var(--text-primary);
+}
+
+/* Desktop Companion Sidebar (Hidden on Mobile, Visible on Desktop) */
+.desktop-companion {
+  display: none;
+  flex-direction: column;
+  gap: 0.85rem;
+}

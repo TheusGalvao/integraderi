@@ -1,0 +1,106 @@
+/* ==========================================================================
+   HEADER COMPONENT (HUB & GAMEPLAY TOPBAR)
+   ========================================================================== */
+.top-header {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.5rem 0.85rem;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.top-header-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.brand-mini {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0.15rem 0;
+  text-align: left;
+}
+
+.brand-emblem {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #070b12;
+  font-family: var(--font-math);
+  font-weight: 900;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-weight: 800;
+  font-size: 0.96rem;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* Compact Player XP & Level Pill */
+.xp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  padding: 0.24rem 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.xp-level-tag {
+  color: var(--color-xp);
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.xp-bar-track {
+  width: 44px;
+  height: 6px;
+  background: var(--bg-canvas);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-xp), var(--color-primary));
+  width: 0%;
+  transition: width 0.35s ease;
+}
+
+.xp-amount-text {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
